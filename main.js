@@ -162,4 +162,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Load Paquetes Data ---
+    const paquetesContainer = document.getElementById('paquetes-container');
+    if (paquetesContainer && typeof paquetesData !== 'undefined') {
+        paquetesData.forEach((paquete, index) => {
+            const delay = index * 0.2;
+            const currentUrl = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent(`Mira este paquete para tu evento: ${paquete.titulo} - ${paquete.precio}`);
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=573202459032&text=${text}%20${currentUrl}`;
+
+            const itemsHtml = paquete.elementos.map(item => `<li><i class="fas fa-check" style="color: var(--primary-color);"></i> ${item}</li>`).join('');
+            
+            const paqueteHtml = `
+                <div class="paquete-card reveal" style="transition-delay: ${delay}s">
+                    <div class="paquete-img-wrapper">
+                        <img src="${paquete.imagen}" alt="${paquete.titulo}" class="paquete-img">
+                    </div>
+                    <div class="paquete-content">
+                        <h3>${paquete.titulo}</h3>
+                        <div class="paquete-precio">${paquete.precio}</div>
+                        <ul class="paquete-items">
+                            ${itemsHtml}
+                        </ul>
+                        <a href="${whatsappUrl}" target="_blank" class="btn-primary" style="width: 100%; text-align: center; margin-top: 20px;">Lo quiero <i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            `;
+            paquetesContainer.innerHTML += paqueteHtml;
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll('#paquetes-container .reveal').forEach((el) => {
+                revealOnScroll.observe(el);
+            });
+        }, 100);
+    }
+
 });
