@@ -198,4 +198,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     }
 
+    // --- Load Artistas Data ---
+    const artistasContainer = document.getElementById('artistas-container');
+    if (artistasContainer && typeof artistasData !== 'undefined') {
+        artistasData.forEach((artista, index) => {
+            const delayClass = index > 0 ? `delay-${index}` : '';
+            const featuresHtml = artista.caracteristicas.map(car => `<li><i class="fas ${car.icono}"></i> ${car.texto}</li>`).join('');
+            
+            const artistaHtml = `
+                <div class="artista-card reveal ${delayClass}">
+                    <div class="artista-img-wrapper">
+                        <div class="artista-img" style="background: url('${artista.imagen}') center/contain no-repeat;"></div>
+                        <div class="artista-name-tag ${artista.etiquetaClase}">${artista.nombre}</div>
+                    </div>
+                    <div class="artista-content">
+                        <h3>${artista.subtitulo}</h3>
+                        <p>${artista.descripcion}</p>
+                        <ul class="artista-features">
+                            ${featuresHtml}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            artistasContainer.innerHTML += artistaHtml;
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll('#artistas-container .reveal').forEach((el) => {
+                revealOnScroll.observe(el);
+            });
+        }, 100);
+    }
+
+    // --- tsParticles Background ---
+    if (typeof tsParticles !== 'undefined') {
+        tsParticles.load("tsparticles", {
+            background: { color: { value: "transparent" } },
+            fpsLimit: 60,
+            particles: {
+                color: { value: "#d4af37" },
+                links: { color: "#d4af37", distance: 150, enable: true, opacity: 0.15, width: 1 },
+                move: { enable: true, speed: 0.8, direction: "none", random: true, straight: false, outModes: { default: "bounce" } },
+                number: { density: { enable: true, area: 1000 }, value: 50 },
+                opacity: { value: 0.4 },
+                shape: { type: "circle" },
+                size: { value: { min: 1, max: 2.5 } }
+            },
+            detectRetina: true
+        });
+    }
+
 });

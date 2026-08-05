@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div id="tsparticles"></div>
 
     <!-- Header Navigation -->
     <header class="header" id="header">
@@ -23,7 +25,7 @@
                 <li><a href="#inicio">La Experiencia</a></li>
                 <li><a href="#emocion">Nuestra Magia</a></li>
                 <li><a href="#artistas">Artistas</a></li>
-                <li><a href="#paquetes">Paquetes</a></li>
+                <li><a href="#paquetes">Propuestas Integrales</a></li>
                 <li><a href="#galeria">Momentos</a></li>
                 <li><a href="#contacto">Hablemos</a></li>
             </ul>
@@ -78,40 +80,8 @@
                 <p class="section-desc">El talento detrás de la magia. Profesionales dedicados a manipular la energía de tu evento y llevarlo al clímax absoluto.</p>
             </div>
             
-            <div class="artistas-grid">
-                <!-- DJ Cool -->
-                <div class="artista-card reveal">
-                    <div class="artista-img-wrapper">
-                        <div class="artista-img dj-cool-img"></div>
-                        <div class="artista-name-tag">DJ Cool</div>
-                    </div>
-                    <div class="artista-content">
-                        <h3>El Arquitecto de la Pista</h3>
-                        <p>Especialista en leer la energía del público. Lleva el control de la noche con una técnica impecable y un instinto para el Crossover Premium.</p>
-                        <ul class="artista-features">
-                            <li><i class="fas fa-glass-cheers"></i> Bodas, 15 Años y Bautizos</li>
-                            <li><i class="fas fa-compact-disc"></i> Residencias en Bares y Clubes</li>
-                            <li><i class="fas fa-map-marker-alt"></i> Experiencias en toda Colombia</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- DJ Ice -->
-                <div class="artista-card reveal delay-1">
-                    <div class="artista-img-wrapper">
-                        <div class="artista-img dj-ice-img"></div>
-                        <div class="artista-name-tag ice-tag">DJ Ice</div>
-                    </div>
-                    <div class="artista-content">
-                        <h3>El Maestro de las Frecuencias</h3>
-                        <p>Innovador y enérgico. Transforma cualquier escenario en un festival privado, combinando ritmos modernos con una animación arrolladora.</p>
-                        <ul class="artista-features">
-                            <li><i class="fas fa-building"></i> Eventos Corporativos</li>
-                            <li><i class="fas fa-music"></i> Conciertos y Festivales</li>
-                            <li><i class="fas fa-star"></i> Fiestas Privadas VIP</li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="artistas-grid" id="artistas-container">
+                <!-- Los artistas se cargarán dinámicamente aquí -->
             </div>
         </div>
     </section>
@@ -120,8 +90,8 @@
     <section class="paquetes-section section" id="paquetes">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Nuestros <span class="highlight">Paquetes</span></h2>
-                <p class="section-desc">Diseñados para elevar tu evento al máximo nivel. Selecciona la experiencia que mejor se adapte a ti.</p>
+                <h2 class="section-title">Nuestras <span class="highlight">Propuestas Integrales</span></h2>
+                <p class="section-desc">Diseñadas para elevar tu evento al máximo nivel. Selecciona la experiencia que mejor se adapte a ti.</p>
             </div>
             <div class="paquetes-grid" id="paquetes-container">
                 <!-- Los paquetes se cargarán dinámicamente aquí -->
@@ -192,7 +162,8 @@
         <p>&copy; 2026 Artes y Entretenimiento | Diseñado para Emocionar.</p>
     </footer>
 
-    <script src="paquetes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
+    <script src="datos.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
