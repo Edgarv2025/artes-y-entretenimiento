@@ -148,7 +148,7 @@ h1, h2, h3, h4, .logo-text {
 .dj-image-wrapper { flex: 1; position: relative; }
 .dj-image {
     width: 100%; height: 600px;
-    background: url('file:///C:/Users/lmoreno/.gemini/antigravity/brain/bd499891-7f1f-4c0d-b8fc-208665ad3927/v2_gallery_wedding_1779913511152.png') center/cover no-repeat;
+    background: url('assets/djcool-promo.jpg') center/cover no-repeat;
     border-radius: 5px; box-shadow: 20px 20px 0px var(--primary-color);
 }
 

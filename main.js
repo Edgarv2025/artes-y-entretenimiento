@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "id": 4,
             "title": "Bautizos y Eventos Infantiles",
             "media": [
-                "fotos/infantiles/infantil1.jpg"
+                "assets/infantil-promo.jpg"
             ],
             "description": "Emociones íntimas con un montaje diseñado para la familia."
         }
