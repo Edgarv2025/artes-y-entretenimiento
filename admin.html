@@ -57,6 +57,7 @@
         <div class="tabs">
             <div class="tab active" onclick="switchTab('paquetes')">Propuestas Integrales</div>
             <div class="tab" onclick="switchTab('artistas')">Gestionar Artistas</div>
+            <div class="tab" onclick="switchTab('testimonios')">Testimonios</div>
         </div>
 
         <!-- Paquetes Section -->
@@ -106,8 +107,8 @@
                     <textarea id="a-descripcion"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Ruta de la Imagen (ej. assets/djcool-promo.jpg)</label>
-                    <input type="text" id="a-imagen">
+                    <label>Rutas de las Imágenes (separadas por coma. ej: assets/foto1.jpg, assets/foto2.jpg)</label>
+                    <textarea id="a-imagenes" placeholder="assets/djcool-promo.jpg, assets/bar_2.jpg"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Características (icono:texto separados por coma. ej: fa-star:Show Premium, fa-music:Crossover)</label>
@@ -123,6 +124,40 @@
             <div id="lista-artistas" class="list-items"></div>
         </div>
 
+        <!-- Testimonios Section -->
+        <div id="sec-testimonios" class="section">
+            <div class="card">
+                <h2 id="t-form-title">Añadir Nuevo Testimonio</h2>
+                <div class="form-group">
+                    <label>Nombre del Cliente</label>
+                    <input type="text" id="t-nombre">
+                </div>
+                <div class="form-group">
+                    <label>Fecha (ej. Hace 2 semanas)</label>
+                    <input type="text" id="t-fecha">
+                </div>
+                <div class="form-group">
+                    <label>Estrellas (1-5)</label>
+                    <input type="number" id="t-estrellas" min="1" max="5" value="5">
+                </div>
+                <div class="form-group">
+                    <label>Servicio (ej. Boda)</label>
+                    <input type="text" id="t-servicio">
+                </div>
+                <div class="form-group">
+                    <label>Comentario</label>
+                    <textarea id="t-comentario"></textarea>
+                </div>
+                <div>
+                    <button id="t-submit-btn" onclick="saveTestimonio()">Añadir Testimonio</button>
+                    <button id="t-cancel-btn" class="btn-cancel" onclick="cancelEdit('testimonio')">Cancelar</button>
+                </div>
+            </div>
+            
+            <h3>Testimonios Actuales:</h3>
+            <div id="lista-testimonios" class="list-items"></div>
+        </div>
+
         <button class="btn-success" onclick="descargarDatos()">Descargar archivo datos.js</button>
         <p style="text-align: center; margin-top: 15px; color: #aaa;">Una vez descargado, arrástralo a GitHub para actualizar la página.</p>
     </div>
@@ -132,9 +167,11 @@
     <script>
         let misPaquetes = typeof paquetesData !== 'undefined' ? JSON.parse(JSON.stringify(paquetesData)) : [];
         let misArtistas = typeof artistasData !== 'undefined' ? JSON.parse(JSON.stringify(artistasData)) : [];
+        let misTestimonios = typeof testimoniosData !== 'undefined' ? JSON.parse(JSON.stringify(testimoniosData)) : [];
 
         let editingPaqueteIdx = null;
         let editingArtistaIdx = null;
+        let editingTestimonioIdx = null;
 
         function checkPassword() {
             const pass = document.getElementById('password').value;
@@ -154,9 +191,12 @@
             if(tabId === 'paquetes') {
                 document.querySelectorAll('.tab')[0].classList.add('active');
                 document.getElementById('sec-paquetes').classList.add('active');
-            } else {
+            } else if(tabId === 'artistas') {
                 document.querySelectorAll('.tab')[1].classList.add('active');
                 document.getElementById('sec-artistas').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('sec-testimonios').classList.add('active');
             }
         }
 
@@ -181,6 +221,18 @@
                     <div>
                         <button class="btn-warning" onclick="startEditArtista(${idx})">Editar</button>
                         <button class="btn-danger" onclick="deleteArtista(${idx})">Eliminar</button>
+                    </div>
+                </div>`;
+            });
+
+            const tList = document.getElementById('lista-testimonios');
+            tList.innerHTML = '';
+            misTestimonios.forEach((t, idx) => {
+                tList.innerHTML += `<div class="list-item">
+                    <div><strong>${t.nombre}</strong> - ${t.estrellas} estrellas</div>
+                    <div>
+                        <button class="btn-warning" onclick="startEditTestimonio(${idx})">Editar</button>
+                        <button class="btn-danger" onclick="deleteTestimonio(${idx})">Eliminar</button>
                     </div>
                 </div>`;
             });
@@ -228,7 +280,15 @@
             document.getElementById('a-nombre').value = a.nombre;
             document.getElementById('a-subtitulo').value = a.subtitulo;
             document.getElementById('a-descripcion').value = a.descripcion;
-            document.getElementById('a-imagen').value = a.imagen;
+            
+            // Handle new imagenes array or fallback to old imagen
+            let imgsStr = "";
+            if (a.imagenes && a.imagenes.length > 0) {
+                imgsStr = a.imagenes.join(', ');
+            } else if (a.imagen) {
+                imgsStr = a.imagen;
+            }
+            document.getElementById('a-imagenes').value = imgsStr;
             
             // Format caracteristicas back to string
             let charsStr = a.caracteristicas ? a.caracteristicas.map(c => `${c.icono}:${c.texto}`).join(', ') : "";
@@ -253,7 +313,7 @@
                 nombre: document.getElementById('a-nombre').value,
                 subtitulo: document.getElementById('a-subtitulo').value,
                 descripcion: document.getElementById('a-descripcion').value,
-                imagen: document.getElementById('a-imagen').value,
+                imagenes: document.getElementById('a-imagenes').value.split(',').map(e => e.trim()).filter(e => e !== ""),
                 etiquetaClase: editingArtistaIdx !== null ? misArtistas[editingArtistaIdx].etiquetaClase : "",
                 caracteristicas: formattedChars
             };
@@ -267,6 +327,42 @@
             }
             
             cancelEdit('artista');
+            renderLists();
+        }
+
+        /* --- Lógica de Edición y Guardado de Testimonios --- */
+        function startEditTestimonio(idx) {
+            editingTestimonioIdx = idx;
+            const t = misTestimonios[idx];
+            document.getElementById('t-nombre').value = t.nombre;
+            document.getElementById('t-fecha').value = t.fecha;
+            document.getElementById('t-estrellas').value = t.estrellas;
+            document.getElementById('t-servicio').value = t.servicio;
+            document.getElementById('t-comentario').value = t.comentario;
+
+            document.getElementById('t-form-title').innerText = "Editar Testimonio";
+            document.getElementById('t-submit-btn').innerText = "Guardar Cambios";
+            document.getElementById('t-cancel-btn').style.display = "inline-block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function saveTestimonio() {
+            const t = {
+                nombre: document.getElementById('t-nombre').value,
+                fecha: document.getElementById('t-fecha').value,
+                estrellas: parseInt(document.getElementById('t-estrellas').value),
+                servicio: document.getElementById('t-servicio').value,
+                comentario: document.getElementById('t-comentario').value
+            };
+            if(!t.nombre) return alert("Llena el nombre del cliente");
+            
+            if(editingTestimonioIdx !== null) {
+                misTestimonios[editingTestimonioIdx] = t;
+            } else {
+                misTestimonios.push(t);
+            }
+            
+            cancelEdit('testimonio');
             renderLists();
         }
 
@@ -286,11 +382,21 @@
                 document.getElementById('a-nombre').value = '';
                 document.getElementById('a-subtitulo').value = '';
                 document.getElementById('a-descripcion').value = '';
-                document.getElementById('a-imagen').value = '';
+                document.getElementById('a-imagenes').value = '';
                 document.getElementById('a-caracteristicas').value = '';
                 document.getElementById('a-form-title').innerText = "Añadir Nuevo Artista";
                 document.getElementById('a-submit-btn').innerText = "Añadir Artista";
                 document.getElementById('a-cancel-btn').style.display = "none";
+            } else if (type === 'testimonio') {
+                editingTestimonioIdx = null;
+                document.getElementById('t-nombre').value = '';
+                document.getElementById('t-fecha').value = '';
+                document.getElementById('t-estrellas').value = '5';
+                document.getElementById('t-servicio').value = '';
+                document.getElementById('t-comentario').value = '';
+                document.getElementById('t-form-title').innerText = "Añadir Nuevo Testimonio";
+                document.getElementById('t-submit-btn').innerText = "Añadir Testimonio";
+                document.getElementById('t-cancel-btn').style.display = "none";
             }
         }
 
@@ -309,9 +415,16 @@
             }
         }
 
+        function deleteTestimonio(idx) {
+            if(confirm("¿Seguro que quieres eliminar este testimonio?")) {
+                misTestimonios.splice(idx, 1);
+                renderLists();
+            }
+        }
+
         /* --- Exportar --- */
         function descargarDatos() {
-            const fileContent = `const paquetesData = ${JSON.stringify(misPaquetes, null, 2)};\n\nconst artistasData = ${JSON.stringify(misArtistas, null, 2)};\n`;
+            const fileContent = `const paquetesData = ${JSON.stringify(misPaquetes, null, 2)};\n\nconst artistasData = ${JSON.stringify(misArtistas, null, 2)};\n\nconst testimoniosData = ${JSON.stringify(misTestimonios, null, 2)};\n`;
             
             const blob = new Blob([fileContent], { type: 'application/javascript' });
             const url = URL.createObjectURL(blob);

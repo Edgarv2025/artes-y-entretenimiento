@@ -57,13 +57,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Load Gallery Data ---
     const galleryContainer = document.getElementById('gallery-container');
     
-    // Gallery Data con rutas 100% locales en subcarpetas
+    // Gallery Data
     const galleryData = [
         {
             "id": 1,
             "title": "Bodas & 15 Años",
             "media": [
                 "fotos/bodas/wedding.png",
+                "assets/boda_3.jpg",
                 "fotos/bodas/video_boda.mp4"
             ],
             "description": "El día más feliz de tu vida, musicalizado a la perfección."
@@ -73,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             "title": "Gala Corporativa",
             "media": [
                 "fotos/corporativo/corp.png",
+                "assets/corp_3.jpg",
                 "fotos/corporativo/video_corp.mp4"
             ],
             "description": "Elegancia y prestigio para el evento de tu empresa."
@@ -81,7 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "id": 3,
             "title": "Bares y Clubes",
             "media": [
-                "fotos/bares/bar1.jpg"
+                "fotos/bares/bar1.jpg",
+                "assets/bar_2.jpg",
+                "assets/bar_3.jpg"
             ],
             "description": "DJ Cool reventando la pista con la mejor energía Crossover."
         },
@@ -89,7 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
             "id": 4,
             "title": "Bautizos y Eventos Infantiles",
             "media": [
-                "assets/infantil-promo.jpg"
+                "assets/infantil-promo.jpg",
+                "assets/bautizo_2.jpg",
+                "assets/bautizo_3.jpg"
             ],
             "description": "Emociones íntimas con un montaje diseñado para la familia."
         }
@@ -205,10 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const delayClass = index > 0 ? `delay-${index}` : '';
             const featuresHtml = artista.caracteristicas.map(car => `<li><i class="fas ${car.icono}"></i> ${car.texto}</li>`).join('');
             
+            // Generate multiple images for slideshow
+            let imgHtml = '';
+            if (artista.imagenes && artista.imagenes.length > 0) {
+                artista.imagenes.forEach((img, idx) => {
+                    const activeClass = idx === 0 ? 'active' : '';
+                    imgHtml += `<div class="artista-img slide ${activeClass}" style="background: url('${img}') center/contain no-repeat;"></div>`;
+                });
+            } else if (artista.imagen) {
+                // Fallback for old data structure
+                imgHtml = `<div class="artista-img slide active" style="background: url('${artista.imagen}') center/contain no-repeat;"></div>`;
+            }
+
             const artistaHtml = `
                 <div class="artista-card reveal ${delayClass}">
-                    <div class="artista-img-wrapper">
-                        <div class="artista-img" style="background: url('${artista.imagen}') center/contain no-repeat;"></div>
+                    <div class="artista-img-wrapper slideshow-container-artist">
+                        ${imgHtml}
                         <div class="artista-name-tag ${artista.etiquetaClase}">${artista.nombre}</div>
                     </div>
                     <div class="artista-content">
@@ -228,7 +246,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 revealOnScroll.observe(el);
             });
         }, 100);
+
+        // Setup Slideshow logic for each artist item
+        document.querySelectorAll('.slideshow-container-artist').forEach(item => {
+            const slides = item.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            if (slides.length > 1) {
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }, 3500); // slightly different timing from gallery
+            }
+        });
     }
+
+    // --- Load Testimonios Data ---
+    const testimoniosTrack = document.getElementById('testimonios-track');
+    if (testimoniosTrack && typeof testimoniosData !== 'undefined') {
+        testimoniosData.forEach(t => {
+            const starsHtml = '<i class="fas fa-star"></i>'.repeat(t.estrellas);
+            const html = `
+                <div class="testimonio-card">
+                    <div class="stars">${starsHtml}</div>
+                    <p class="testimonio-text">"${t.comentario}"</p>
+                    <div class="testimonio-author">${t.nombre}</div>
+                    <div class="testimonio-meta">
+                        <span><i class="fas fa-music" style="color: var(--primary-color);"></i> ${t.servicio}</span>
+                        <span>${t.fecha}</span>
+                    </div>
+                </div>
+            `;
+            testimoniosTrack.innerHTML += html;
+        });
+
+        // Simple carousel sliding logic
+        let currentScroll = 0;
+        const cardWidth = 380; // 350px card + 30px gap
+        setInterval(() => {
+            // Check if we reached the end
+            if (testimoniosTrack.scrollWidth - testimoniosTrack.clientWidth <= currentScroll) {
+                currentScroll = 0;
+            } else {
+                currentScroll += cardWidth;
+            }
+            testimoniosTrack.style.transform = `translateX(-${currentScroll}px)`;
+        }, 3000);
+    }
+
+    // --- FAQ Accordion ---
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Close others
+            faqQuestions.forEach(q => {
+                if (q !== btn) q.classList.remove('active');
+            });
+            // Toggle current
+            btn.classList.toggle('active');
+        });
+    });
 
     // --- tsParticles Background ---
     if (typeof tsParticles !== 'undefined') {
