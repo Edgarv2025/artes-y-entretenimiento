@@ -341,11 +341,106 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('click', function(event) {
-        const modal = document.getElementById('review-modal');
-        if (event.target === modal) {
+        const reviewModal = document.getElementById('review-modal');
+        const flashModal = document.getElementById('flash-modal');
+        if (event.target === reviewModal) {
             closeReviewModal();
         }
+        if (event.target === flashModal) {
+            closeFlashModal();
+        }
     });
+
+    // --- Visit Counter Logic ---
+    const visitCountEl = document.getElementById('visit-count');
+    if(visitCountEl) {
+        const baseDate = new Date('2024-01-01').getTime();
+        const now = new Date().getTime();
+        const diffDays = Math.floor((now - baseDate) / (1000 * 60 * 60 * 24));
+        
+        let storedVisits = localStorage.getItem('site_visits');
+        let currentVisits = 1000 + (diffDays * 7); 
+        
+        if(storedVisits) {
+            currentVisits = parseInt(storedVisits) + Math.floor(Math.random() * 3) + 1;
+        }
+        
+        localStorage.setItem('site_visits', currentVisits);
+        visitCountEl.innerText = currentVisits.toLocaleString('es-CO');
+    }
+
+    // --- FOMO Notification Logic ---
+    const fomoMessages = [
+        "Carlos M. acaba de reservar el Plan Prestige",
+        "Una nueva fecha para el Plan Elegance acaba de ser apartada",
+        "Bodas & 15 Años: nueva celebración agendada para diciembre",
+        "Una familia de Bogotá acaba de reservar DJ Cool para su evento",
+        "DJ Ice acaba de ser contratado para una celebración este sábado",
+        "Una nueva fecha de noviembre acaba de quedar apartada",
+        "El Plan Prestige acaba de recibir una nueva reserva",
+        "Una pareja de Bogotá está cotizando un paquete para su boda",
+        "Nueva solicitud recibida para 15 años en Bogotá",
+        "Una fecha de diciembre acaba de entrar en proceso de reserva",
+        "Nueva contratación: DJ Cool + paquete de sonido para evento privado",
+        "Una celebración de 15 años acaba de reservar uno de nuestros paquetes premium",
+        "Nueva reserva del Plan Prestige para una celebración especial",
+        "Una familia acaba de elegir el Plan Elegance para su evento",
+        "Nueva consulta recibida para contratación de DJ + artista",
+        "Una fecha disponible para noviembre acaba de recibir una solicitud de reserva",
+        "Varias personas están consultando disponibilidad para diciembre",
+        "Nueva cotización solicitada para DJ Ice + producción musical",
+        "Otra celebración se suma a nuestra agenda: fecha reservada para diciembre",
+        "Nueva solicitud de contratación para DJ + artista en Bogotá",
+        "Carlos M. acaba de reservar el Plan Prestige",
+        "Bodas & 15 Años agendado para Diciembre",
+        "Familia Gómez reservó DJ Cool para este sábado",
+        "Última fecha de Noviembre apartada hace 1 hora",
+        "Alguien de Bogotá está cotizando un paquete"
+    ];
+    
+    const fomoNotification = document.getElementById('fomo-notification');
+    const fomoMessageEl = document.getElementById('fomo-message');
+    
+    if(fomoNotification && fomoMessageEl) {
+        // [CONFIGURACIÓN] Tiempo de espera para las Notificaciones FOMO
+        // 45000 = 45 segundos de espera entre cada notificación. Puedes cambiar este número.
+        setInterval(() => {
+            const randomMsg = fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
+            fomoMessageEl.innerText = randomMsg;
+            fomoNotification.classList.add('show');
+            
+            // 5000 = 5 segundos que dura la notificación visible en pantalla
+            setTimeout(() => {
+                fomoNotification.classList.remove('show');
+            }, 5000);
+            
+        }, 45000); 
+    }
+
+    // --- Flash Offer Modal Logic ---
+    window.closeFlashModal = function() {
+        document.getElementById('flash-modal').classList.remove('show');
+        sessionStorage.setItem('flash_offer_seen', 'true');
+    };
+
+    const flashModal = document.getElementById('flash-modal');
+    if(flashModal && !sessionStorage.getItem('flash_offer_seen')) {
+        
+        // [CONFIGURACIÓN] Tiempo de espera para el Regalo de 1 Hora Gratis
+        // 60000 = 60 segundos (2 minutos) de espera antes de que salte. Puedes cambiar este número.
+        setTimeout(() => {
+            if(!sessionStorage.getItem('flash_offer_seen')) {
+                flashModal.classList.add('show');
+            }
+        }, 60000); 
+        
+        // Exit intent para PC (cuando el mouse sale por arriba)
+        document.addEventListener('mouseleave', (e) => {
+            if(e.clientY <= 0 && !sessionStorage.getItem('flash_offer_seen')) {
+                flashModal.classList.add('show');
+            }
+        });
+    }
 
     // --- tsParticles Background ---
     if (typeof tsParticles !== 'undefined') {

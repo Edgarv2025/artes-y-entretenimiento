@@ -49,7 +49,10 @@
         <div class="hero-content reveal">
             <h1 class="hero-title">Vive tu Experiencia.<br><span class="highlight-text">Nosotros ponemos la Magia.</span></h1>
             <p class="hero-subtitle">Manejamos la emoción de tu evento para que tú solo te dediques a disfrutar cada instante.</p>
-            <a href="#contacto" class="btn-primary">Diseña tu Experiencia <i class="fas fa-arrow-right"></i></a>
+            <div class="visit-counter reveal delay-1">
+                <i class="fas fa-fire" style="color: #ff5500;"></i> <span id="visit-count">1000</span> personas han descubierto nuestra magia.
+            </div>
+            <a href="#contacto" class="btn-primary" style="margin-top: 20px;">Diseña tu Experiencia <i class="fas fa-arrow-right"></i></a>
         </div>
     </section>
 
@@ -245,6 +248,30 @@
                 <textarea id="rm-comentario" placeholder="¿Cómo te pareció nuestro servicio?" style="height: 100px; resize: none;"></textarea>
             </div>
             <button class="btn-primary" onclick="submitReview()" style="width: 100%; border: none; font-size: 1.1rem; padding: 15px; margin-top: 20px;">Enviar Reseña <i class="fab fa-whatsapp"></i></button>
+        </div>
+    </div>
+
+    <!-- Flash Offer Modal -->
+    <div id="flash-modal" class="modal">
+        <div class="modal-content" style="text-align: center; border-color: #ff5500;">
+            <span class="close-modal" onclick="closeFlashModal()">&times;</span>
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">¡Espera! 🎁</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 15px;">Tenemos un regalo exclusivo para ti si agendas hoy.</p>
+            <div style="background: rgba(255, 85, 0, 0.1); padding: 20px; border-radius: 8px; border: 1px dashed #ff5500; margin-bottom: 20px;">
+                <h3 style="color: #ff5500; font-size: 1.5rem; margin-bottom: 10px;">1 HORA EXTRA DE SONIDO GRATIS EN LA PROPUESTA SELECCIONADA</h3>
+                <p style="color: #ddd;">Valorada en $150.000 COP. Asegura tu fecha ahora y llévate más rumba sin costo.</p>
+            </div>
+            <a href="https://api.whatsapp.com/send?phone=573202459032&text=Hola!%20Estaba%20en%20la%20p%C3%A1gina%20y%20quiero%20reclamar%20mi%20regalo%20de%201%20HORA%20EXTRA%20GRATIS%20al%20reservar." target="_blank" class="btn-primary" style="display: block; width: 100%; background: linear-gradient(45deg, #ff5500, #ffaa00);" onclick="closeFlashModal()">RECLAMAR MI REGALO AHORA <i class="fab fa-whatsapp"></i></a>
+            <p style="margin-top: 15px; font-size: 0.85rem; color: #888; cursor: pointer;" onclick="closeFlashModal()">No gracias, no quiero la hora gratis</p>
+        </div>
+    </div>
+
+    <!-- FOMO Notification -->
+    <div id="fomo-notification" class="fomo-notification">
+        <div class="fomo-icon"><i class="fas fa-star" style="color: #000;"></i></div>
+        <div class="fomo-text">
+            <strong>Alguien</strong><br>
+            <span id="fomo-message">acaba de reservar un paquete</span>
         </div>
     </div>
 
