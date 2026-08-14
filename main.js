@@ -308,6 +308,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Review Modal Logic ---
+    window.openReviewModal = function() {
+        document.getElementById('review-modal').classList.add('show');
+    };
+
+    window.closeReviewModal = function() {
+        document.getElementById('review-modal').classList.remove('show');
+    };
+
+    window.submitReview = function() {
+        const nombre = document.getElementById('rm-nombre').value;
+        const estrellas = document.getElementById('rm-estrellas').value;
+        const comentario = document.getElementById('rm-comentario').value;
+
+        if(!nombre || !comentario) {
+            alert('Por favor, ingresa tu nombre y un comentario.');
+            return;
+        }
+
+        const estrellasTexto = '⭐'.repeat(estrellas);
+        const mensaje = `Hola! Quiero dejar mi reseña sobre el servicio:%0A%0A*Nombre:* ${nombre}%0A*Calificación:* ${estrellasTexto} (${estrellas}/5)%0A*Comentario:* "${comentario}"%0A%0A¡Muchas gracias!`;
+        const url = `https://api.whatsapp.com/send?phone=573202459032&text=${mensaje}`;
+        
+        window.open(url, '_blank');
+        closeReviewModal();
+        
+        // Reset form
+        document.getElementById('rm-nombre').value = '';
+        document.getElementById('rm-estrellas').value = '5';
+        document.getElementById('rm-comentario').value = '';
+    };
+
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('review-modal');
+        if (event.target === modal) {
+            closeReviewModal();
+        }
+    });
+
     // --- tsParticles Background ---
     if (typeof tsParticles !== 'undefined') {
         tsParticles.load("tsparticles", {

@@ -33,6 +33,7 @@
                 <li><a href="#emocion">Nuestra Magia</a></li>
                 <li><a href="#artistas">Artistas</a></li>
                 <li><a href="#paquetes">Propuestas Integrales</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
                 <li><a href="#galeria">Momentos</a></li>
                 <li><a href="#contacto">Hablemos</a></li>
             </ul>
@@ -106,20 +107,7 @@
         </div>
     </section>
 
-    <!-- Galería Section with DJ Cool Watermark -->
-    <section class="gallery-section section" id="galeria">
-        <div class="container">
-            <div class="gallery-header reveal">
-                <h2 class="section-title">Momentos <span class="highlight">Inolvidables</span></h2>
-                <p>Nuestra firma visual. Explora la magnitud de nuestros montajes y la alegría de quienes confiaron su emoción en nosotros.</p>
-            </div>
-            <div class="gallery-grid" id="gallery-container">
-                <!-- Gallery items will be dynamically loaded via JS -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonios Section -->
+    <!-- Testimonios Section (MOVED HERE) -->
     <section class="testimonios-section section" id="testimonios">
         <div class="container">
             <div class="section-header reveal">
@@ -134,9 +122,22 @@
             </div>
 
             <div class="google-review-btn-container reveal">
-                <a href="https://g.page/r/YOUR_GOOGLE_BUSINESS_LINK/review" target="_blank" class="btn-primary" title="Dejar reseña en Google">
-                    <i class="fab fa-google"></i> Déjanos tu opinión en Google
-                </a>
+                <button onclick="openReviewModal()" class="btn-primary" title="Escribe tu reseña">
+                    <i class="fas fa-comment-dots"></i> Escribe tu reseña
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería Section with DJ Cool Watermark -->
+    <section class="gallery-section section" id="galeria">
+        <div class="container">
+            <div class="gallery-header reveal">
+                <h2 class="section-title">Momentos <span class="highlight">Inolvidables</span></h2>
+                <p>Nuestra firma visual. Explora la magnitud de nuestros montajes y la alegría de quienes confiaron su emoción en nosotros.</p>
+            </div>
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Gallery items will be dynamically loaded via JS -->
             </div>
         </div>
     </section>
@@ -218,6 +219,34 @@
     <footer class="footer">
         <p>&copy; 2026 Artes y Entretenimiento | Diseñado para Emocionar.</p>
     </footer>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+            <h2>Escribe tu <span class="highlight">Opinión</span></h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Nos encanta leerte. Tu opinión es muy valiosa para nosotros.</p>
+            <div class="form-group-modal">
+                <label>Tu Nombre:</label>
+                <input type="text" id="rm-nombre" placeholder="Ej. Juan Pérez">
+            </div>
+            <div class="form-group-modal">
+                <label>Calificación:</label>
+                <select id="rm-estrellas">
+                    <option value="5">⭐⭐⭐⭐⭐ (Excelente)</option>
+                    <option value="4">⭐⭐⭐⭐ (Muy Bueno)</option>
+                    <option value="3">⭐⭐⭐ (Bueno)</option>
+                    <option value="2">⭐⭐ (Regular)</option>
+                    <option value="1">⭐ (Malo)</option>
+                </select>
+            </div>
+            <div class="form-group-modal">
+                <label>Tu Comentario:</label>
+                <textarea id="rm-comentario" placeholder="¿Cómo te pareció nuestro servicio?" style="height: 100px; resize: none;"></textarea>
+            </div>
+            <button class="btn-primary" onclick="submitReview()" style="width: 100%; border: none; font-size: 1.1rem; padding: 15px; margin-top: 20px;">Enviar Reseña <i class="fab fa-whatsapp"></i></button>
+        </div>
+    </div>
 
     <!-- WhatsApp Float Button -->
     <a href="https://api.whatsapp.com/send?phone=573202459032&text=Hola!%20Me%20interesa%20contratar%20sus%20servicios%20de%20Artes%20y%20Entretenimiento." class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
