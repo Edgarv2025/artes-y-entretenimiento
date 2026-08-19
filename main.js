@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemsHtml = paquete.elementos.map(item => `<li><i class="fas fa-check" style="color: var(--primary-color);"></i> ${item}</li>`).join('');
             
             const paqueteHtml = `
-                <div class="paquete-card reveal" style="transition-delay: ${delay}s">
+                <div class="paquete-card reveal active" style="transition-delay: ${delay}s">
                     <div class="paquete-img-wrapper">
                         <img src="${paquete.imagen}" alt="${paquete.titulo}" class="paquete-img">
                     </div>
@@ -216,15 +216,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (artista.imagenes && artista.imagenes.length > 0) {
                 artista.imagenes.forEach((img, idx) => {
                     const activeClass = idx === 0 ? 'active' : '';
-                    imgHtml += `<div class="artista-img slide ${activeClass}" style="background: url('${img}') center/contain no-repeat;"></div>`;
+                    imgHtml += `<img src="${img}" alt="${artista.nombre}" class="artista-img slide ${activeClass}">`;
                 });
             } else if (artista.imagen) {
                 // Fallback for old data structure
-                imgHtml = `<div class="artista-img slide active" style="background: url('${artista.imagen}') center/contain no-repeat;"></div>`;
+                imgHtml = `<img src="${artista.imagen}" alt="${artista.nombre}" class="artista-img slide active">`;
             }
 
             const artistaHtml = `
-                <div class="artista-card reveal ${delayClass}">
+                <div class="artista-card reveal active ${delayClass}">
                     <div class="artista-img-wrapper slideshow-container-artist">
                         ${imgHtml}
                         <div class="artista-name-tag ${artista.etiquetaClase}">${artista.nombre}</div>

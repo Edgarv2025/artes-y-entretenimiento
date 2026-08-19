@@ -7,7 +7,7 @@ const paquetesData = [
     elementos: [
       "2 Cabinas Profesionales",
       "Cercha Tipo T",
-      "2 Robots LM30"
+      "2 Robots LM30",
       "2 Laser azul B500 (Show Laser)",
       "1 Bola de Espejos",
       "4 Pares LED",
