@@ -7,10 +7,10 @@ const paquetesData = [
     elementos: [
       "2 Cabinas Profesionales",
       "Cercha Tipo T",
-      "4 Robots LS10",
-      "1 Spider LED",
+      "2 Robots LM30"
+      "2 Laser azul B500 (Show Laser)",
       "1 Bola de Espejos",
-      "2 Pares LED",
+      "4 Pares LED",
       "Cabina DJ Acrílica Iluminada",
       "Controlador y PC",
       "DJ Animador"
@@ -26,12 +26,13 @@ const paquetesData = [
       "Cercha tipo Truss",
       "2 robots prisma 100w aro luz",
       "1 robots 150W colmena",
-      "4 laser B500 azul (Show Laser)",
+      "2 robots LM70S wass",
+      "2 laser B500 azul (Show Laser)",
       "1 Bola espejos ful'80s",
       "Luz neon UV",
       "Cabina dj iluminada",
       "Controlador y pc",
-      "Video bean con telon"
+      "Video beam con telon"
     ]
   }
 ];
