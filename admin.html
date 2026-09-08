@@ -47,7 +47,7 @@
     <div class="login-screen" id="login-screen">
         <h1>Acceso Seguro</h1>
         <p style="margin-bottom: 20px; color: #aaa;">Introduce la contraseña para editar el contenido</p>
-        <input type="password" id="password" placeholder="Contraseña">
+        <input type="password" id="password" placeholder="Contraseña" onkeyup="if(event.key === 'Enter') checkPassword()">
         <button onclick="checkPassword()">Ingresar</button>
     </div>
 
@@ -58,6 +58,7 @@
             <div class="tab active" onclick="switchTab('paquetes')">Propuestas Integrales</div>
             <div class="tab" onclick="switchTab('artistas')">Gestionar Artistas</div>
             <div class="tab" onclick="switchTab('testimonios')">Testimonios</div>
+            <a href="marketing.html" class="tab" style="text-decoration: none; background: linear-gradient(135deg, #d4af37, #ffe58f); color: #000; display: flex; align-items: center; justify-content: center; gap: 8px;">✨ Marketing Inteligente</a>
         </div>
 
         <!-- Paquetes Section -->
@@ -158,8 +159,11 @@
             <div id="lista-testimonios" class="list-items"></div>
         </div>
 
-        <button class="btn-success" onclick="descargarDatos()">Descargar archivo datos.js</button>
-        <p style="text-align: center; margin-top: 15px; color: #aaa;">Una vez descargado, arrástralo a GitHub para actualizar la página.</p>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 30px;">
+            <button class="btn-success" onclick="guardarEnServidor()">💾 Guardar Cambios Directamente en la Página Web</button>
+            <button class="btn-cancel" style="display: block; width: 100%; text-align: center; padding: 12px; background: #333; margin: 0;" onclick="descargarDatos()">📥 Descargar archivo datos.js (Copia de Respaldo)</button>
+        </div>
+        <p id="save-status" style="text-align: center; margin-top: 15px; color: #00c851; font-weight: bold; display: none;"></p>
     </div>
 
     <!-- Cargar datos actuales para poder editarlos -->
@@ -174,14 +178,29 @@
         let editingTestimonioIdx = null;
 
         function checkPassword() {
-            const pass = document.getElementById('password').value;
+            const pass = (document.getElementById('password').value || '').trim();
             if(pass === 'admin2026') {
+                sessionStorage.setItem('admin_logged', 'true');
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 renderLists();
             } else {
-                alert('Contraseña incorrecta.');
+                alert('Contraseña incorrecta. Recuerda que es: admin2026');
             }
+        }
+
+        function initAdminAuth() {
+            if (sessionStorage.getItem('admin_logged') === 'true') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                renderLists();
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdminAuth);
+        } else {
+            initAdminAuth();
         }
 
         function switchTab(tabId) {
@@ -377,7 +396,7 @@
                 document.getElementById('p-form-title').innerText = "Añadir Nueva Propuesta";
                 document.getElementById('p-submit-btn').innerText = "Añadir Propuesta";
                 document.getElementById('p-cancel-btn').style.display = "none";
-            } else {
+            } else if (type === 'artista') {
                 editingArtistaIdx = null;
                 document.getElementById('a-nombre').value = '';
                 document.getElementById('a-subtitulo').value = '';
@@ -438,6 +457,40 @@
             URL.revokeObjectURL(url);
             
             alert('¡Archivo descargado! Ahora arrastra el archivo datos.js a tu página de GitHub para guardar los cambios.');
+        }
+
+        /* --- Guardado Automático en Servidor Local --- */
+        async function guardarEnServidor() {
+            const statusEl = document.getElementById('save-status');
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#ffbb33';
+            statusEl.innerText = 'Guardando cambios en el servidor...';
+
+            try {
+                const res = await fetch('/api/marketing/catalog/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paquetes: misPaquetes,
+                        artistas: misArtistas,
+                        testimonios: misTestimonios
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    statusEl.style.color = '#00c851';
+                    statusEl.innerText = '✅ ¡Cambios guardados directamente en datos.js! La página web ya está actualizada.';
+                    alert('✅ ¡Cambios guardados con éxito en la plataforma!');
+                } else {
+                    statusEl.style.color = '#ff4444';
+                    statusEl.innerText = '❌ Error: ' + (data.error || 'No se pudo guardar');
+                    alert('Error: ' + data.error);
+                }
+            } catch(e) {
+                statusEl.style.color = '#00d2ff';
+                statusEl.innerText = 'ℹ️ Si estás abriendo el archivo localmente (sin el servidor Node.js corriendo), usa el botón de "Descargar archivo datos.js" para actualizarlo.';
+                alert('Aviso: El servidor local no está respondiendo en este momento. Si abriste el archivo directamente en el navegador con doble clic, recuerda iniciar el servidor con "npm start" o descarga el archivo con el botón gris de abajo.');
+            }
         }
     </script>
 </body>

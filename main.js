@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "media": [
                 "fotos/bodas/wedding.png",
                 "assets/boda_3.jpg",
-                "fotos/bodas/video_boda.mp4"
             ],
             "description": "El día más feliz de tu vida, musicalizado a la perfección."
         },
@@ -75,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
             "media": [
                 "fotos/corporativo/corp.png",
                 "assets/corp_3.jpg",
-                "fotos/corporativo/video_corp.mp4"
             ],
             "description": "Elegancia y prestigio para el evento de tu empresa."
         },
@@ -190,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <ul class="paquete-items">
                             ${itemsHtml}
                         </ul>
-                        <a href="${whatsappUrl}" target="_blank" class="btn-primary" style="width: 100%; text-align: center; margin-top: 20px;">Lo quiero <i class="fab fa-whatsapp"></i></a>
+                        <a href="${whatsappUrl}" target="_blank" onclick="trackPackageClick('${paquete.titulo}', '${paquete.precio}')" class="btn-primary" style="width: 100%; text-align: center; margin-top: 20px;">Lo quiero <i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             `;
@@ -317,6 +315,23 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('review-modal').classList.remove('show');
     };
 
+    window.trackPackageClick = function(titulo, precio) {
+        try {
+            fetch('/api/marketing/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: 'Interesado en ' + titulo,
+                    client_type: 'Cliente final',
+                    service_interest: titulo,
+                    estimated_budget: precio,
+                    source_channel: 'Web (Clic en Paquete)',
+                    status: 'Nuevo'
+                })
+            }).catch(() => {});
+        } catch(e) {}
+    };
+
     window.submitReview = function() {
         const nombre = document.getElementById('rm-nombre').value;
         const estrellas = document.getElementById('rm-estrellas').value;
@@ -326,6 +341,21 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Por favor, ingresa tu nombre y un comentario.');
             return;
         }
+
+        // Registrar lead pasivamente en el CRM sin bloquear WhatsApp
+        try {
+            fetch('/api/marketing/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: nombre,
+                    client_type: 'Cliente final',
+                    source_channel: 'Reseña Web',
+                    service_interest: 'Evento General',
+                    notes: `Reseña ${estrellas} estrellas: "${comentario}"`
+                })
+            }).catch(() => {});
+        } catch(e) {}
 
         const estrellasTexto = '⭐'.repeat(estrellas);
         const mensaje = `Hola! Quiero dejar mi reseña sobre el servicio:%0A%0A*Nombre:* ${nombre}%0A*Calificación:* ${estrellasTexto} (${estrellas}/5)%0A*Comentario:* "${comentario}"%0A%0A¡Muchas gracias!`;

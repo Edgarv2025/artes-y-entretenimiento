@@ -2,19 +2,19 @@
   {
     "id": 1,
     "title": "Evento Corporativo Premium",
-    "image": "assets/gallery1.png",
+    "image": "assets/corp_3.jpg",
     "description": "Sonido profesional y montaje para conferencias."
   },
   {
     "id": 2,
     "title": "Boda Exclusiva con Djcool",
-    "image": "assets/gallery2.png",
+    "image": "assets/boda_3.jpg",
     "description": "Fiesta inigualable con nuestro servicio Crossover."
   },
   {
     "id": 3,
     "title": "Concierto al aire libre",
-    "image": "assets/gallery3.png",
+    "image": "assets/bar_3.jpg",
     "description": "Potencia y claridad para grandes audiencias."
   }
 ]
