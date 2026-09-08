@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | Artes y Entretenimiento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37;
+            --bg: #050505;
+            --card-bg: #111;
+            --text: #fff;
+        }
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); padding: 50px; }
+        h1 { color: var(--primary); text-align: center; margin-bottom: 40px; }
+        .login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
+        input { padding: 15px; width: 300px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; font-family: inherit; margin-bottom: 20px;}
+        button { padding: 15px 30px; background: var(--primary); color: #000; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; text-transform: uppercase;}
+        button:hover { opacity: 0.8; }
+        
+        #admin-panel { display: none; max-width: 800px; margin: 0 auto; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #333; }
+        .form-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+        label { margin-bottom: 8px; font-weight: bold; color: #aaa; }
+        .form-group input, .form-group textarea { width: 100%; box-sizing: border-box; }
+        .form-group textarea { height: 100px; resize: vertical; padding: 15px; border-radius: 5px; border: 1px solid #333; background: #222; color: #fff; }
+        
+        .list-items { margin-top: 20px; }
+        .list-item { background: #222; padding: 15px; border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        
+        .btn-danger { background: #ff4444; color: white; padding: 8px 15px; }
+        .btn-warning { background: #ffbb33; color: black; padding: 8px 15px; margin-right: 10px;}
+        .btn-success { background: #00C851; width: 100%; font-size: 1.2rem; margin-top: 20px; }
+        .btn-cancel { background: #333; color: white; display: none; margin-left: 10px;}
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab { flex: 1; text-align: center; padding: 15px; background: #222; cursor: pointer; border-radius: 5px; font-weight: bold;}
+        .tab.active { background: var(--primary); color: #000; }
+        
+        .section { display: none; }
+        .section.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="login-screen" id="login-screen">
+        <h1>Acceso Seguro</h1>
+        <p style="margin-bottom: 20px; color: #aaa;">Introduce la contraseña para editar el contenido</p>
+        <input type="password" id="password" placeholder="Contraseña" onkeyup="if(event.key === 'Enter') checkPassword()">
+        <button onclick="checkPassword()">Ingresar</button>
+    </div>
+
+    <div id="admin-panel">
+        <h1>Panel de Configuración</h1>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('paquetes')">Propuestas Integrales</div>
+            <div class="tab" onclick="switchTab('artistas')">Gestionar Artistas</div>
+            <div class="tab" onclick="switchTab('testimonios')">Testimonios</div>
+            <a href="marketing.html" class="tab" style="text-decoration: none; background: linear-gradient(135deg, #d4af37, #ffe58f); color: #000; display: flex; align-items: center; justify-content: center; gap: 8px;">✨ Marketing Inteligente</a>
+        </div>
+
+        <!-- Paquetes Section -->
+        <div id="sec-paquetes" class="section active">
+            <div class="card">
+                <h2 id="p-form-title">Añadir Nueva Propuesta</h2>
+                <div class="form-group">
+                    <label>Título de la Propuesta (ej. PLAN VIP)</label>
+                    <input type="text" id="p-titulo">
+                </div>
+                <div class="form-group">
+                    <label>Precio (ej. $900.000)</label>
+                    <input type="text" id="p-precio">
+                </div>
+                <div class="form-group">
+                    <label>Ruta de la Imagen (ej. assets/plan-elegance.png)</label>
+                    <input type="text" id="p-imagen">
+                </div>
+                <div class="form-group">
+                    <label>Elementos incluidos (separados por coma)</label>
+                    <textarea id="p-elementos" placeholder="2 Cabinas, Luces LED, DJ, Humo..."></textarea>
+                </div>
+                <div>
+                    <button id="p-submit-btn" onclick="savePaquete()">Añadir Propuesta</button>
+                    <button id="p-cancel-btn" class="btn-cancel" onclick="cancelEdit('paquete')">Cancelar</button>
+                </div>
+            </div>
+            
+            <h3>Propuestas Actuales:</h3>
+            <div id="lista-paquetes" class="list-items"></div>
+        </div>
+
+        <!-- Artistas Section -->
+        <div id="sec-artistas" class="section">
+            <div class="card">
+                <h2 id="a-form-title">Añadir Nuevo Artista</h2>
+                <div class="form-group">
+                    <label>Nombre del Artista</label>
+                    <input type="text" id="a-nombre">
+                </div>
+                <div class="form-group">
+                    <label>Subtítulo (ej. El Rey de la Noche)</label>
+                    <input type="text" id="a-subtitulo">
+                </div>
+                <div class="form-group">
+                    <label>Descripción corta</label>
+                    <textarea id="a-descripcion"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Rutas de las Imágenes (separadas por coma. ej: assets/foto1.jpg, assets/foto2.jpg)</label>
+                    <textarea id="a-imagenes" placeholder="assets/djcool-promo.jpg, assets/bar_2.jpg"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Características (icono:texto separados por coma. ej: fa-star:Show Premium, fa-music:Crossover)</label>
+                    <textarea id="a-caracteristicas" placeholder="fa-star:Show Premium, fa-music:Crossover"></textarea>
+                </div>
+                <div>
+                    <button id="a-submit-btn" onclick="saveArtista()">Añadir Artista</button>
+                    <button id="a-cancel-btn" class="btn-cancel" onclick="cancelEdit('artista')">Cancelar</button>
+                </div>
+            </div>
+            
+            <h3>Artistas Actuales:</h3>
+            <div id="lista-artistas" class="list-items"></div>
+        </div>
+
+        <!-- Testimonios Section -->
+        <div id="sec-testimonios" class="section">
+            <div class="card">
+                <h2 id="t-form-title">Añadir Nuevo Testimonio</h2>
+                <div class="form-group">
+                    <label>Nombre del Cliente</label>
+                    <input type="text" id="t-nombre">
+                </div>
+                <div class="form-group">
+                    <label>Fecha (ej. Hace 2 semanas)</label>
+                    <input type="text" id="t-fecha">
+                </div>
+                <div class="form-group">
+                    <label>Estrellas (1-5)</label>
+                    <input type="number" id="t-estrellas" min="1" max="5" value="5">
+                </div>
+                <div class="form-group">
+                    <label>Servicio (ej. Boda)</label>
+                    <input type="text" id="t-servicio">
+                </div>
+                <div class="form-group">
+                    <label>Comentario</label>
+                    <textarea id="t-comentario"></textarea>
+                </div>
+                <div>
+                    <button id="t-submit-btn" onclick="saveTestimonio()">Añadir Testimonio</button>
+                    <button id="t-cancel-btn" class="btn-cancel" onclick="cancelEdit('testimonio')">Cancelar</button>
+                </div>
+            </div>
+            
+            <h3>Testimonios Actuales:</h3>
+            <div id="lista-testimonios" class="list-items"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 30px;">
+            <button class="btn-success" onclick="guardarEnServidor()">💾 Guardar Cambios Directamente en la Página Web</button>
+            <button class="btn-cancel" style="display: block; width: 100%; text-align: center; padding: 12px; background: #333; margin: 0;" onclick="descargarDatos()">📥 Descargar archivo datos.js (Copia de Respaldo)</button>
+        </div>
+        <p id="save-status" style="text-align: center; margin-top: 15px; color: #00c851; font-weight: bold; display: none;"></p>
+    </div>
+
+    <!-- Cargar datos actuales para poder editarlos -->
+    <script src="datos.js"></script>
+    <script>
+        let misPaquetes = typeof paquetesData !== 'undefined' ? JSON.parse(JSON.stringify(paquetesData)) : [];
+        let misArtistas = typeof artistasData !== 'undefined' ? JSON.parse(JSON.stringify(artistasData)) : [];
+        let misTestimonios = typeof testimoniosData !== 'undefined' ? JSON.parse(JSON.stringify(testimoniosData)) : [];
+
+        let editingPaqueteIdx = null;
+        let editingArtistaIdx = null;
+        let editingTestimonioIdx = null;
+
+        function checkPassword() {
+            const pass = (document.getElementById('password').value || '').trim();
+            if(pass === 'admin2026') {
+                sessionStorage.setItem('admin_logged', 'true');
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                renderLists();
+            } else {
+                alert('Contraseña incorrecta. Recuerda que es: admin2026');
+            }
+        }
+
+        function initAdminAuth() {
+            if (sessionStorage.getItem('admin_logged') === 'true') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                renderLists();
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdminAuth);
+        } else {
+            initAdminAuth();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            if(tabId === 'paquetes') {
+                document.querySelectorAll('.tab')[0].classList.add('active');
+                document.getElementById('sec-paquetes').classList.add('active');
+            } else if(tabId === 'artistas') {
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                document.getElementById('sec-artistas').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab')[2].classList.add('active');
+                document.getElementById('sec-testimonios').classList.add('active');
+            }
+        }
+
+        function renderLists() {
+            const pList = document.getElementById('lista-paquetes');
+            pList.innerHTML = '';
+            misPaquetes.forEach((p, idx) => {
+                pList.innerHTML += `<div class="list-item">
+                    <div><strong>${p.titulo}</strong> - ${p.precio}</div>
+                    <div>
+                        <button class="btn-warning" onclick="startEditPaquete(${idx})">Editar</button>
+                        <button class="btn-danger" onclick="deletePaquete(${idx})">Eliminar</button>
+                    </div>
+                </div>`;
+            });
+
+            const aList = document.getElementById('lista-artistas');
+            aList.innerHTML = '';
+            misArtistas.forEach((a, idx) => {
+                aList.innerHTML += `<div class="list-item">
+                    <div><strong>${a.nombre}</strong> - ${a.subtitulo}</div>
+                    <div>
+                        <button class="btn-warning" onclick="startEditArtista(${idx})">Editar</button>
+                        <button class="btn-danger" onclick="deleteArtista(${idx})">Eliminar</button>
+                    </div>
+                </div>`;
+            });
+
+            const tList = document.getElementById('lista-testimonios');
+            tList.innerHTML = '';
+            misTestimonios.forEach((t, idx) => {
+                tList.innerHTML += `<div class="list-item">
+                    <div><strong>${t.nombre}</strong> - ${t.estrellas} estrellas</div>
+                    <div>
+                        <button class="btn-warning" onclick="startEditTestimonio(${idx})">Editar</button>
+                        <button class="btn-danger" onclick="deleteTestimonio(${idx})">Eliminar</button>
+                    </div>
+                </div>`;
+            });
+        }
+
+        /* --- Lógica de Edición y Guardado de Paquetes --- */
+        function startEditPaquete(idx) {
+            editingPaqueteIdx = idx;
+            const p = misPaquetes[idx];
+            document.getElementById('p-titulo').value = p.titulo;
+            document.getElementById('p-precio').value = p.precio;
+            document.getElementById('p-imagen').value = p.imagen;
+            document.getElementById('p-elementos').value = p.elementos.join(', ');
+
+            document.getElementById('p-form-title').innerText = "Editar Propuesta";
+            document.getElementById('p-submit-btn').innerText = "Guardar Cambios";
+            document.getElementById('p-cancel-btn').style.display = "inline-block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function savePaquete() {
+            const p = {
+                id: editingPaqueteIdx !== null ? misPaquetes[editingPaqueteIdx].id : Date.now().toString(),
+                titulo: document.getElementById('p-titulo').value,
+                precio: document.getElementById('p-precio').value,
+                imagen: document.getElementById('p-imagen').value,
+                elementos: document.getElementById('p-elementos').value.split(',').map(e => e.trim()).filter(e => e !== "")
+            };
+            if(!p.titulo || !p.precio) return alert("Llena los campos básicos");
+            
+            if(editingPaqueteIdx !== null) {
+                misPaquetes[editingPaqueteIdx] = p;
+            } else {
+                misPaquetes.push(p);
+            }
+            
+            cancelEdit('paquete');
+            renderLists();
+        }
+
+        /* --- Lógica de Edición y Guardado de Artistas --- */
+        function startEditArtista(idx) {
+            editingArtistaIdx = idx;
+            const a = misArtistas[idx];
+            document.getElementById('a-nombre').value = a.nombre;
+            document.getElementById('a-subtitulo').value = a.subtitulo;
+            document.getElementById('a-descripcion').value = a.descripcion;
+            
+            // Handle new imagenes array or fallback to old imagen
+            let imgsStr = "";
+            if (a.imagenes && a.imagenes.length > 0) {
+                imgsStr = a.imagenes.join(', ');
+            } else if (a.imagen) {
+                imgsStr = a.imagen;
+            }
+            document.getElementById('a-imagenes').value = imgsStr;
+            
+            // Format caracteristicas back to string
+            let charsStr = a.caracteristicas ? a.caracteristicas.map(c => `${c.icono}:${c.texto}`).join(', ') : "";
+            document.getElementById('a-caracteristicas').value = charsStr;
+
+            document.getElementById('a-form-title').innerText = "Editar Artista";
+            document.getElementById('a-submit-btn').innerText = "Guardar Cambios";
+            document.getElementById('a-cancel-btn').style.display = "inline-block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function saveArtista() {
+            const charsInput = document.getElementById('a-caracteristicas').value.split(',');
+            const formattedChars = charsInput.map(c => {
+                let parts = c.split(':');
+                if(parts.length === 2) return { icono: parts[0].trim(), texto: parts[1].trim() };
+                return { icono: "fa-star", texto: c.trim() }; // fallback
+            }).filter(c => c.texto !== "");
+
+            const a = {
+                id: editingArtistaIdx !== null ? misArtistas[editingArtistaIdx].id : Date.now().toString(),
+                nombre: document.getElementById('a-nombre').value,
+                subtitulo: document.getElementById('a-subtitulo').value,
+                descripcion: document.getElementById('a-descripcion').value,
+                imagenes: document.getElementById('a-imagenes').value.split(',').map(e => e.trim()).filter(e => e !== ""),
+                etiquetaClase: editingArtistaIdx !== null ? misArtistas[editingArtistaIdx].etiquetaClase : "",
+                caracteristicas: formattedChars
+            };
+
+            if(!a.nombre) return alert("Ponle un nombre al artista");
+            
+            if(editingArtistaIdx !== null) {
+                misArtistas[editingArtistaIdx] = a;
+            } else {
+                misArtistas.push(a);
+            }
+            
+            cancelEdit('artista');
+            renderLists();
+        }
+
+        /* --- Lógica de Edición y Guardado de Testimonios --- */
+        function startEditTestimonio(idx) {
+            editingTestimonioIdx = idx;
+            const t = misTestimonios[idx];
+            document.getElementById('t-nombre').value = t.nombre;
+            document.getElementById('t-fecha').value = t.fecha;
+            document.getElementById('t-estrellas').value = t.estrellas;
+            document.getElementById('t-servicio').value = t.servicio;
+            document.getElementById('t-comentario').value = t.comentario;
+
+            document.getElementById('t-form-title').innerText = "Editar Testimonio";
+            document.getElementById('t-submit-btn').innerText = "Guardar Cambios";
+            document.getElementById('t-cancel-btn').style.display = "inline-block";
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function saveTestimonio() {
+            const t = {
+                nombre: document.getElementById('t-nombre').value,
+                fecha: document.getElementById('t-fecha').value,
+                estrellas: parseInt(document.getElementById('t-estrellas').value),
+                servicio: document.getElementById('t-servicio').value,
+                comentario: document.getElementById('t-comentario').value
+            };
+            if(!t.nombre) return alert("Llena el nombre del cliente");
+            
+            if(editingTestimonioIdx !== null) {
+                misTestimonios[editingTestimonioIdx] = t;
+            } else {
+                misTestimonios.push(t);
+            }
+            
+            cancelEdit('testimonio');
+            renderLists();
+        }
+
+        /* --- Cancelar Edición --- */
+        function cancelEdit(type) {
+            if(type === 'paquete') {
+                editingPaqueteIdx = null;
+                document.getElementById('p-titulo').value = '';
+                document.getElementById('p-precio').value = '';
+                document.getElementById('p-imagen').value = '';
+                document.getElementById('p-elementos').value = '';
+                document.getElementById('p-form-title').innerText = "Añadir Nueva Propuesta";
+                document.getElementById('p-submit-btn').innerText = "Añadir Propuesta";
+                document.getElementById('p-cancel-btn').style.display = "none";
+            } else if (type === 'artista') {
+                editingArtistaIdx = null;
+                document.getElementById('a-nombre').value = '';
+                document.getElementById('a-subtitulo').value = '';
+                document.getElementById('a-descripcion').value = '';
+                document.getElementById('a-imagenes').value = '';
+                document.getElementById('a-caracteristicas').value = '';
+                document.getElementById('a-form-title').innerText = "Añadir Nuevo Artista";
+                document.getElementById('a-submit-btn').innerText = "Añadir Artista";
+                document.getElementById('a-cancel-btn').style.display = "none";
+            } else if (type === 'testimonio') {
+                editingTestimonioIdx = null;
+                document.getElementById('t-nombre').value = '';
+                document.getElementById('t-fecha').value = '';
+                document.getElementById('t-estrellas').value = '5';
+                document.getElementById('t-servicio').value = '';
+                document.getElementById('t-comentario').value = '';
+                document.getElementById('t-form-title').innerText = "Añadir Nuevo Testimonio";
+                document.getElementById('t-submit-btn').innerText = "Añadir Testimonio";
+                document.getElementById('t-cancel-btn').style.display = "none";
+            }
+        }
+
+        /* --- Borrar --- */
+        function deletePaquete(idx) {
+            if(confirm("¿Seguro que quieres eliminar esta propuesta?")) {
+                misPaquetes.splice(idx, 1);
+                renderLists();
+            }
+        }
+
+        function deleteArtista(idx) {
+            if(confirm("¿Seguro que quieres eliminar este artista?")) {
+                misArtistas.splice(idx, 1);
+                renderLists();
+            }
+        }
+
+        function deleteTestimonio(idx) {
+            if(confirm("¿Seguro que quieres eliminar este testimonio?")) {
+                misTestimonios.splice(idx, 1);
+                renderLists();
+            }
+        }
+
+        /* --- Exportar --- */
+        function descargarDatos() {
+            const fileContent = `const paquetesData = ${JSON.stringify(misPaquetes, null, 2)};\n\nconst artistasData = ${JSON.stringify(misArtistas, null, 2)};\n\nconst testimoniosData = ${JSON.stringify(misTestimonios, null, 2)};\n`;
+            
+            const blob = new Blob([fileContent], { type: 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'datos.js';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('¡Archivo descargado! Ahora arrastra el archivo datos.js a tu página de GitHub para guardar los cambios.');
+        }
+
+        /* --- Guardado Automático en Servidor Local --- */
+        async function guardarEnServidor() {
+            const statusEl = document.getElementById('save-status');
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#ffbb33';
+            statusEl.innerText = 'Guardando cambios en el servidor...';
+
+            try {
+                const res = await fetch('/api/marketing/catalog/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paquetes: misPaquetes,
+                        artistas: misArtistas,
+                        testimonios: misTestimonios
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    statusEl.style.color = '#00c851';
+                    statusEl.innerText = '✅ ¡Cambios guardados directamente en datos.js! La página web ya está actualizada.';
+                    alert('✅ ¡Cambios guardados con éxito en la plataforma!');
+                } else {
+                    statusEl.style.color = '#ff4444';
+                    statusEl.innerText = '❌ Error: ' + (data.error || 'No se pudo guardar');
+                    alert('Error: ' + data.error);
+                }
+            } catch(e) {
+                statusEl.style.color = '#00d2ff';
+                statusEl.innerText = 'ℹ️ Si estás abriendo el archivo localmente (sin el servidor Node.js corriendo), usa el botón de "Descargar archivo datos.js" para actualizarlo.';
+                alert('Aviso: El servidor local no está respondiendo en este momento. Si abriste el archivo directamente en el navegador con doble clic, recuerda iniciar el servidor con "npm start" o descarga el archivo con el botón gris de abajo.');
+            }
+        }
+    </script>
+</body>
+</html>

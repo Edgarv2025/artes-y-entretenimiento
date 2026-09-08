@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artes y Entretenimiento | Alquiler de Sonido y DJ Profesional en Colombia</title>
+    <meta name="description" content="Alquiler de sonido, iluminación y DJ profesional para bodas, 15 años y eventos corporativos en Colombia. Planes desde $600.000. ¡Cotiza hoy!">
+    <meta name="keywords" content="DJ para bodas, DJ 15 años, alquiler de sonido, luces para fiestas, eventos corporativos, DJ Cool, DJ Ice, sonido profesional Colombia">
+    <meta name="author" content="Artes y Entretenimiento">
+    <link rel="stylesheet" href="style.css">
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Bar de Urgencia -->
+    <div class="top-bar">
+        <p>🔥 <strong>AGENDA 2026 ABIERTA</strong> | Pocas fechas disponibles para temporada alta. <a href="https://api.whatsapp.com/send?phone=573202459032&text=Hola!%20Me%20interesa%20contratar%20sus%20servicios%20de%20Artes%20y%20Entretenimiento." target="_blank">¡Reserva Ahora!</a></p>
+    </div>
+
+    <!-- Animated Background -->
+    <div id="tsparticles"></div>
+
+    <!-- Header Navigation -->
+    <header class="header" id="header">
+        <div class="logo">
+            <span class="logo-text">Artes <span class="highlight">&</span> Entretenimiento</span>
+        </div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li><a href="#inicio">La Experiencia</a></li>
+                <li><a href="#emocion">Nuestra Magia</a></li>
+                <li><a href="#artistas">Artistas</a></li>
+                <li><a href="#paquetes">Propuestas Integrales</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#galeria">Momentos</a></li>
+                <li><a href="#contacto">Hablemos</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="hero-overlay"></div>
+        <div class="hero-content reveal">
+            <h1 class="hero-title">Vive tu Experiencia.<br><span class="highlight-text">Nosotros ponemos la Magia.</span></h1>
+            <p class="hero-subtitle">Manejamos la emoción de tu evento para que tú solo te dediques a disfrutar cada instante.</p>
+            <div class="visit-counter reveal delay-1">
+                <i class="fas fa-fire" style="color: #ff5500;"></i> <span id="visit-count">1000</span> personas han descubierto nuestra magia.
+            </div>
+            <a href="#contacto" class="btn-primary" style="margin-top: 20px;">Diseña tu Experiencia <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Emotional Services Section -->
+    <section class="services section" id="emocion">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">El Arte de la <span class="highlight">Emoción</span></h2>
+                <p class="section-desc">Entendemos que no buscas sonido o luces; buscas que tus invitados rían, lloren de alegría y bailen hasta el amanecer. Nosotros orquestamos esos sentimientos.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <i class="fas fa-heartbeat service-icon"></i>
+                    <h3>El Latido de la Fiesta</h3>
+                    <p>Audio que no solo se escucha, se siente en el pecho. Diseñamos la acústica perfecta para que cada nota musical erice la piel de tus invitados.</p>
+                </div>
+                <div class="service-card reveal delay-1">
+                    <i class="fas fa-magic service-icon"></i>
+                    <h3>Atmósferas Mágicas</h3>
+                    <p>Transformamos espacios comunes en mundos extraordinarios. Nuestra iluminación pinta de colores las emociones de tu noche.</p>
+                </div>
+                <div class="service-card reveal delay-2">
+                    <i class="fas fa-star service-icon"></i>
+                    <h3>Conducción Estelar</h3>
+                    <p>Maestría de ceremonia y animación que conecta almas. Llevamos el hilo conductor de tu evento con elegancia y energía arrolladora.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestros Artistas Section -->
+    <section class="artistas-section section" id="artistas">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Nuestros <span class="highlight">Artistas</span></h2>
+                <p class="section-desc">El talento detrás de la magia. Profesionales dedicados a manipular la energía de tu evento y llevarlo al clímax absoluto.</p>
+            </div>
+            
+            <div class="artistas-grid" id="artistas-container">
+                <!-- Los artistas se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Paquetes Section -->
+    <section class="paquetes-section section" id="paquetes">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Nuestras <span class="highlight">Propuestas Integrales</span></h2>
+                <p class="section-desc">Diseñadas para elevar tu evento al máximo nivel. Selecciona la experiencia que mejor se adapte a ti.</p>
+            </div>
+            <div class="paquetes-grid" id="paquetes-container">
+                <!-- Los paquetes se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios Section (MOVED HERE) -->
+    <section class="testimonios-section section" id="testimonios">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Lo que dicen <span class="highlight">nuestros clientes</span></h2>
+                <p class="section-desc">Más de 500 eventos exitosos nos respaldan. Tu tranquilidad es nuestra prioridad.</p>
+            </div>
+            
+            <div class="testimonios-carousel-wrapper reveal">
+                <div class="testimonios-track" id="testimonios-track">
+                    <!-- Los testimonios se cargarán aquí dinámicamente -->
+                </div>
+            </div>
+
+            <div class="google-review-btn-container reveal">
+                <button onclick="openReviewModal()" class="btn-primary" title="Escribe tu reseña">
+                    <i class="fas fa-comment-dots"></i> Escribe tu reseña
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería Section with DJ Cool Watermark -->
+    <section class="gallery-section section" id="galeria">
+        <div class="container">
+            <div class="gallery-header reveal">
+                <h2 class="section-title">Momentos <span class="highlight">Inolvidables</span></h2>
+                <p>Nuestra firma visual. Explora la magnitud de nuestros montajes y la alegría de quienes confiaron su emoción en nosotros.</p>
+            </div>
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Gallery items will be dynamically loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section section" id="faq">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Preguntas <span class="highlight">Frecuentes</span></h2>
+            </div>
+            
+            <div class="faq-accordion reveal">
+                <div class="faq-item">
+                    <button class="faq-question">¿Con cuánto tiempo de anticipación debo reservar?</button>
+                    <div class="faq-answer"><p>Recomendamos reservar con al menos 1 a 2 meses de anticipación, especialmente para temporada alta (noviembre-diciembre). Sin embargo, contáctanos para verificar disponibilidad de último minuto.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">¿Viajan a otras ciudades de Colombia?</button>
+                    <div class="faq-answer"><p>¡Sí! Tenemos base principal, pero cubrimos eventos en toda Colombia. Los costos de viáticos y transporte se cotizan por separado según el destino.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">¿El precio de los paquetes incluye el transporte y montaje?</button>
+                    <div class="faq-answer"><p>El transporte está incluido dentro del perímetro urbano de nuestra sede. Para zonas aledañas o rurales, tiene un recargo adicional. El montaje y desmontaje siempre está incluido.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">¿Podemos elegir la música o ustedes deciden?</button>
+                    <div class="faq-answer"><p>¡Es tu evento! Puedes pasarnos una lista de canciones imperdibles y de canciones prohibidas. Nuestros DJs combinarán tus gustos con su experiencia para asegurar que la pista siempre esté llena.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Section -->
+    <section class="contact section" id="contacto">
+        <div class="container">
+            <div class="contact-wrapper reveal">
+                <div class="contact-info">
+                    <h2 class="section-title" style="text-align: left;">Demos el <span class="highlight">Primer Paso</span></h2>
+                    <p style="margin-bottom: 40px; color: var(--text-muted);">Hablemos de tus sueños y de cómo haremos que tu evento sea la mejor noche de tu vida.</p>
+                    
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Nuestro Centro de Experiencias</h4>
+                            <p>Calle 16 h bis 112 a 14, Bogotá, Colombia</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Conecta con Nosotros</h4>
+                            <p>+57 320 245 90 32</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links-large">
+                        <a href="#" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/573202459032" class="social-btn whatsapp" target="_blank" rel="noopener noreferrer">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m3!1d3976.626466367503!2d-74.15654!3d4.66598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMzknNTcuNSJOIDc0wrAwOScyMy41Ilc!5e0!3m2!1ses!2sco!4v1680000000000!5m2!1ses!2sco" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; border-radius: 10px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2026 Artes y Entretenimiento | Diseñado para Emocionar.</p>
+    </footer>
+
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeReviewModal()">&times;</span>
+            <h2>Escribe tu <span class="highlight">Opinión</span></h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Nos encanta leerte. Tu opinión es muy valiosa para nosotros.</p>
+            <div class="form-group-modal">
+                <label>Tu Nombre:</label>
+                <input type="text" id="rm-nombre" placeholder="Ej. Juan Pérez">
+            </div>
+            <div class="form-group-modal">
+                <label>Calificación:</label>
+                <select id="rm-estrellas">
+                    <option value="5">⭐⭐⭐⭐⭐ (Excelente)</option>
+                    <option value="4">⭐⭐⭐⭐ (Muy Bueno)</option>
+                    <option value="3">⭐⭐⭐ (Bueno)</option>
+                    <option value="2">⭐⭐ (Regular)</option>
+                    <option value="1">⭐ (Malo)</option>
+                </select>
+            </div>
+            <div class="form-group-modal">
+                <label>Tu Comentario:</label>
+                <textarea id="rm-comentario" placeholder="¿Cómo te pareció nuestro servicio?" style="height: 100px; resize: none;"></textarea>
+            </div>
+            <button class="btn-primary" onclick="submitReview()" style="width: 100%; border: none; font-size: 1.1rem; padding: 15px; margin-top: 20px;">Enviar Reseña <i class="fab fa-whatsapp"></i></button>
+        </div>
+    </div>
+
+    <!-- Flash Offer Modal -->
+    <div id="flash-modal" class="modal">
+        <div class="modal-content" style="text-align: center; border-color: #ff5500;">
+            <span class="close-modal" onclick="closeFlashModal()">&times;</span>
+            <h2 style="font-size: 2.5rem; margin-bottom: 10px;">¡Espera! 🎁</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 15px;">Tenemos un regalo exclusivo para ti si agendas hoy.</p>
+            <div style="background: rgba(255, 85, 0, 0.1); padding: 20px; border-radius: 8px; border: 1px dashed #ff5500; margin-bottom: 20px;">
+                <h3 style="color: #ff5500; font-size: 1.5rem; margin-bottom: 10px;">1 HORA EXTRA DE SONIDO GRATIS EN LA PROPUESTA SELECCIONADA</h3>
+                <p style="color: #ddd;">Valorada en $150.000 COP. Asegura tu fecha ahora y llévate más rumba sin costo.</p>
+            </div>
+            <a href="https://api.whatsapp.com/send?phone=573202459032&text=Hola!%20Estaba%20en%20la%20p%C3%A1gina%20y%20quiero%20reclamar%20mi%20regalo%20de%201%20HORA%20EXTRA%20GRATIS%20al%20reservar." target="_blank" class="btn-primary" style="display: block; width: 100%; background: linear-gradient(45deg, #ff5500, #ffaa00);" onclick="closeFlashModal()">RECLAMAR MI REGALO AHORA <i class="fab fa-whatsapp"></i></a>
+            <p style="margin-top: 15px; font-size: 0.85rem; color: #888; cursor: pointer;" onclick="closeFlashModal()">No gracias, no quiero la hora gratis</p>
+        </div>
+    </div>
+
+    <!-- FOMO Notification -->
+    <div id="fomo-notification" class="fomo-notification">
+        <div class="fomo-icon"><i class="fas fa-star" style="color: #000;"></i></div>
+        <div class="fomo-text">
+            <strong>Alguien</strong><br>
+            <span id="fomo-message">acaba de reservar un paquete</span>
+        </div>
+    </div>
+
+    <!-- WhatsApp Float Button -->
+    <a href="https://api.whatsapp.com/send?phone=573202459032&text=Hola!%20Me%20interesa%20contratar%20sus%20servicios%20de%20Artes%20y%20Entretenimiento." class="whatsapp-float" target="_blank" title="Contáctanos por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
+    <script src="datos.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
