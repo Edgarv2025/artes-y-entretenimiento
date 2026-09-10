@@ -22,6 +22,25 @@ const upload = multer({
   }
 });
 
+const assetUploadDir = path.resolve(__dirname, '../../assets');
+const assetUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, assetUploadDir),
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname || '').toLowerCase();
+      const base = (path.basename(file.originalname || 'asset', ext) || 'asset')
+        .replace(/\s+/g, '-')
+        .toLowerCase();
+      cb(null, `${base}-${Date.now()}${ext}`);
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/gif'];
+    if (allowed.includes(file.mimetype)) cb(null, true);
+    else cb(new Error('Tipo de archivo no permitido. Usa JPG, PNG, WEBP o GIF.'));
+  }
+});
+
 const { getCatalogData } = require('../services/catalogService');
 const { getAudiences, getCampaigns, getCampaignById, createCampaign, updateCampaign, deleteCampaign } = require('../services/campaignService');
 const { generateCommercialContent } = require('../services/aiService');
@@ -41,6 +60,47 @@ router.get('/catalog', (req, res) => {
   }
 });
 
+// Listar imágenes disponibles en la carpeta assets/
+router.get('/catalog/assets', (req, res) => {
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const assetsDir = path.resolve(__dirname, '../../assets');
+    if (!fs.existsSync(assetsDir)) return res.json({ success: true, data: [] });
+
+    const files = fs.readdirSync(assetsDir)
+      .filter(f => ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(path.extname(f).toLowerCase()))
+      .map(f => ({
+        filename: f,
+        path: `assets/${f}`
+      }));
+
+    res.json({ success: true, data: files });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Subir imagen directamente a assets/
+router.post('/catalog/upload-asset', assetUpload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, error: 'No se recibió ninguna imagen' });
+    }
+    const relativePath = `assets/${req.file.filename}`;
+    res.json({
+      success: true,
+      data: {
+        filename: req.file.filename,
+        path: relativePath
+      },
+      message: 'Imagen subida exitosamente a assets/'
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
 router.post('/catalog/save', (req, res) => {
   try {
     const fs = require('fs');
@@ -55,6 +115,14 @@ router.post('/catalog/save', (req, res) => {
     
     const datosFilePath = path.resolve(__dirname, '../../datos.js');
     fs.writeFileSync(datosFilePath, fileContent, 'utf8');
+
+    // Sincronizar también con public/datos.js si la carpeta public existe
+    const publicDatosPath = path.resolve(__dirname, '../../public/datos.js');
+    if (fs.existsSync(path.dirname(publicDatosPath))) {
+      try {
+        fs.writeFileSync(publicDatosPath, fileContent, 'utf8');
+      } catch (e) {}
+    }
 
     res.json({ success: true, message: 'Archivo datos.js actualizado exitosamente en el servidor' });
   } catch (err) {
@@ -360,6 +428,42 @@ router.get('/analytics', (req, res) => {
   try {
     const data = getDashboardAnalytics();
     res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// --- 10. Posicionamiento SEO Continuo ---
+const { calculateSeoHealth, runAutonomousSeoCycle, generateStructuredData } = require('../services/seoService');
+
+router.get('/seo/status', (req, res) => {
+  try {
+    const health = calculateSeoHealth();
+    const host = req.get('host');
+    const protocol = req.protocol || 'http';
+    const baseUrl = `${protocol}://${host}`;
+    const structuredData = generateStructuredData(baseUrl);
+
+    res.json({
+      success: true,
+      data: {
+        ...health,
+        structuredData
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.post('/seo/refresh', (req, res) => {
+  try {
+    const health = runAutonomousSeoCycle();
+    res.json({
+      success: true,
+      message: 'Ciclo de optimización SEO continuo ejecutado exitosamente',
+      data: health
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

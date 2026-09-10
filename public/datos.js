@@ -34,6 +34,22 @@ const paquetesData = [
       "Controlador y pc",
       "Video beam con telon"
     ]
+  },
+  {
+    "id": "diamante",
+    "titulo": "PLAN DIAMANTE SHOW LED",
+    "precio": "desde $1.200.000",
+    "imagen": "assets/lagrimales.png",
+    "elementos": [
+      "Pista de Baile LED Iluminada (Efecto Pixel)",
+      "4 Tótems LED Verticales (Lagrimales)",
+      "Cabina DJ con Pantalla LED Frontal",
+      "Sistema de Sonido Profesional Beta3 (Subwoofers + Cabinas)",
+      "4 Cabezas Móviles Beam / Robots en Tótems",
+      "4 Pares LED de Iluminación Perimetral",
+      "DJ Animador Profesional Crossover",
+      "Controlador y PC de Alta Gama"
+    ]
   }
 ];
 

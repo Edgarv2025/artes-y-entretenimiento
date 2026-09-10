@@ -74,8 +74,21 @@
                     <input type="text" id="p-precio">
                 </div>
                 <div class="form-group">
-                    <label>Ruta de la Imagen (ej. assets/plan-elegance.png)</label>
-                    <input type="text" id="p-imagen">
+                    <label>Imagen de la Propuesta</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                        <select id="p-imagen-select" onchange="onSelectPackageImage(this.value)" style="flex: 1; min-width: 240px; padding: 12px; background: #222; color: #fff; border: 1px solid #333; border-radius: 5px; font-family: inherit;">
+                            <option value="">-- Seleccionar imagen de la carpeta assets/ --</option>
+                        </select>
+                        <label for="p-upload-input" class="btn-warning" style="margin: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; font-size: 0.9rem; border-radius: 5px; font-weight: bold;">
+                            📁 Subir Foto desde PC
+                        </label>
+                        <input type="file" id="p-upload-input" accept="image/*" style="display: none;" onchange="uploadAssetImage(this, 'p-imagen', 'p-preview')">
+                    </div>
+                    <input type="text" id="p-imagen" placeholder="assets/plan-elegance.png" oninput="updateImagePreview('p-imagen', 'p-preview')">
+                    <div id="p-preview-container" style="margin-top: 10px; display: none; text-align: center; background: #000; padding: 12px; border-radius: 8px; border: 1px solid #333;">
+                        <span style="font-size: 0.8rem; color: #aaa; display: block; margin-bottom: 6px;">Vista Previa de la Imagen:</span>
+                        <img id="p-preview" src="" style="max-height: 180px; max-width: 100%; border-radius: 6px; object-fit: contain;">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Elementos incluidos (separados por coma)</label>
@@ -184,6 +197,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 renderLists();
+                loadAssetList();
             } else {
                 alert('Contraseña incorrecta. Recuerda que es: admin2026');
             }
@@ -194,6 +208,7 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 renderLists();
+                loadAssetList();
             }
         }
 
@@ -266,21 +281,29 @@
             document.getElementById('p-imagen').value = p.imagen;
             document.getElementById('p-elementos').value = p.elementos.join(', ');
 
+            // Actualizar selector y vista previa
+            const selectEl = document.getElementById('p-imagen-select');
+            if (selectEl) selectEl.value = p.imagen || '';
+            updateImagePreview('p-imagen', 'p-preview');
+
             document.getElementById('p-form-title').innerText = "Editar Propuesta";
             document.getElementById('p-submit-btn').innerText = "Guardar Cambios";
             document.getElementById('p-cancel-btn').style.display = "inline-block";
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        function savePaquete() {
+        async function savePaquete() {
             const p = {
                 id: editingPaqueteIdx !== null ? misPaquetes[editingPaqueteIdx].id : Date.now().toString(),
-                titulo: document.getElementById('p-titulo').value,
-                precio: document.getElementById('p-precio').value,
-                imagen: document.getElementById('p-imagen').value,
+                titulo: document.getElementById('p-titulo').value.trim(),
+                precio: document.getElementById('p-precio').value.trim(),
+                imagen: document.getElementById('p-imagen').value.trim(),
                 elementos: document.getElementById('p-elementos').value.split(',').map(e => e.trim()).filter(e => e !== "")
             };
-            if(!p.titulo || !p.precio) return alert("Llena los campos básicos");
+            if(!p.titulo || !p.precio) return alert("Por favor diligencia al menos el Título y el Precio de la propuesta.");
+            if(!p.imagen) {
+                p.imagen = "assets/plan-elegance.png"; // Fallback visual por defecto
+            }
             
             if(editingPaqueteIdx !== null) {
                 misPaquetes[editingPaqueteIdx] = p;
@@ -290,6 +313,9 @@
             
             cancelEdit('paquete');
             renderLists();
+
+            // Autoguardado directo en el servidor para que aparezca de inmediato en la página
+            await guardarEnServidor(false);
         }
 
         /* --- Lógica de Edición y Guardado de Artistas --- */
@@ -319,7 +345,7 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        function saveArtista() {
+        async function saveArtista() {
             const charsInput = document.getElementById('a-caracteristicas').value.split(',');
             const formattedChars = charsInput.map(c => {
                 let parts = c.split(':');
@@ -347,6 +373,7 @@
             
             cancelEdit('artista');
             renderLists();
+            await guardarEnServidor(false);
         }
 
         /* --- Lógica de Edición y Guardado de Testimonios --- */
@@ -365,7 +392,7 @@
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
-        function saveTestimonio() {
+        async function saveTestimonio() {
             const t = {
                 nombre: document.getElementById('t-nombre').value,
                 fecha: document.getElementById('t-fecha').value,
@@ -383,6 +410,7 @@
             
             cancelEdit('testimonio');
             renderLists();
+            await guardarEnServidor(false);
         }
 
         /* --- Cancelar Edición --- */
@@ -392,6 +420,10 @@
                 document.getElementById('p-titulo').value = '';
                 document.getElementById('p-precio').value = '';
                 document.getElementById('p-imagen').value = '';
+                const selectEl = document.getElementById('p-imagen-select');
+                if (selectEl) selectEl.value = '';
+                const previewCont = document.getElementById('p-preview-container');
+                if (previewCont) previewCont.style.display = 'none';
                 document.getElementById('p-elementos').value = '';
                 document.getElementById('p-form-title').innerText = "Añadir Nueva Propuesta";
                 document.getElementById('p-submit-btn').innerText = "Añadir Propuesta";
@@ -419,29 +451,32 @@
             }
         }
 
-        /* --- Borrar --- */
-        function deletePaquete(idx) {
+        /* --- Borrar con Autoguardado --- */
+        async function deletePaquete(idx) {
             if(confirm("¿Seguro que quieres eliminar esta propuesta?")) {
                 misPaquetes.splice(idx, 1);
                 renderLists();
+                await guardarEnServidor(false);
             }
         }
 
-        function deleteArtista(idx) {
+        async function deleteArtista(idx) {
             if(confirm("¿Seguro que quieres eliminar este artista?")) {
                 misArtistas.splice(idx, 1);
                 renderLists();
+                await guardarEnServidor(false);
             }
         }
 
-        function deleteTestimonio(idx) {
+        async function deleteTestimonio(idx) {
             if(confirm("¿Seguro que quieres eliminar este testimonio?")) {
                 misTestimonios.splice(idx, 1);
                 renderLists();
+                await guardarEnServidor(false);
             }
         }
 
-        /* --- Exportar --- */
+        /* --- Exportar Respaldo --- */
         function descargarDatos() {
             const fileContent = `const paquetesData = ${JSON.stringify(misPaquetes, null, 2)};\n\nconst artistasData = ${JSON.stringify(misArtistas, null, 2)};\n\nconst testimoniosData = ${JSON.stringify(misTestimonios, null, 2)};\n`;
             
@@ -456,15 +491,15 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert('¡Archivo descargado! Ahora arrastra el archivo datos.js a tu página de GitHub para guardar los cambios.');
+            alert('¡Archivo descargado! Ahora puedes guardar esta copia de respaldo de datos.js.');
         }
 
-        /* --- Guardado Automático en Servidor Local --- */
-        async function guardarEnServidor() {
+        /* --- Guardado en Servidor (Manual o Automático) --- */
+        async function guardarEnServidor(isManual = true) {
             const statusEl = document.getElementById('save-status');
             statusEl.style.display = 'block';
             statusEl.style.color = '#ffbb33';
-            statusEl.innerText = 'Guardando cambios en el servidor...';
+            statusEl.innerText = 'Guardando cambios en la plataforma...';
 
             try {
                 const res = await fetch('/api/marketing/catalog/save', {
@@ -479,17 +514,109 @@
                 const data = await res.json();
                 if (data.success) {
                     statusEl.style.color = '#00c851';
-                    statusEl.innerText = '✅ ¡Cambios guardados directamente en datos.js! La página web ya está actualizada.';
-                    alert('✅ ¡Cambios guardados con éxito en la plataforma!');
+                    statusEl.innerText = '✅ ¡Cambios guardados directamente en la página web!';
+                    if (isManual) alert('✅ ¡Cambios guardados con éxito en la plataforma!');
                 } else {
                     statusEl.style.color = '#ff4444';
                     statusEl.innerText = '❌ Error: ' + (data.error || 'No se pudo guardar');
-                    alert('Error: ' + data.error);
+                    if (isManual) alert('Error: ' + data.error);
                 }
             } catch(e) {
                 statusEl.style.color = '#00d2ff';
                 statusEl.innerText = 'ℹ️ Si estás abriendo el archivo localmente (sin el servidor Node.js corriendo), usa el botón de "Descargar archivo datos.js" para actualizarlo.';
-                alert('Aviso: El servidor local no está respondiendo en este momento. Si abriste el archivo directamente en el navegador con doble clic, recuerda iniciar el servidor con "npm start" o descarga el archivo con el botón gris de abajo.');
+                if (isManual) {
+                    alert('Aviso: El servidor local no está respondiendo en este momento. Si abriste el archivo directamente en el navegador con doble clic, recuerda iniciar el servidor con "npm start" o descarga el archivo con el botón gris de abajo.');
+                }
+            }
+        }
+
+        /* --- Funciones de Gestión Multimedia en Admin --- */
+        async function loadAssetList() {
+            try {
+                const res = await fetch('/api/marketing/catalog/assets');
+                const json = await res.json();
+                if (json.success && json.data) {
+                    const selectEl = document.getElementById('p-imagen-select');
+                    if (!selectEl) return;
+                    
+                    selectEl.innerHTML = '<option value="">-- Seleccionar imagen de la carpeta assets/ --</option>';
+                    json.data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item.path;
+                        opt.textContent = `🖼️ ${item.filename}`;
+                        selectEl.appendChild(opt);
+                    });
+
+                    // Si hay un paquete en edición, sincronizar selección
+                    const currentImg = document.getElementById('p-imagen').value;
+                    if (currentImg) {
+                        selectEl.value = currentImg;
+                        updateImagePreview('p-imagen', 'p-preview');
+                    }
+                }
+            } catch(e) {
+                console.log('Modo estático sin backend activo para lista de assets');
+            }
+        }
+
+        function onSelectPackageImage(val) {
+            if (!val) return;
+            document.getElementById('p-imagen').value = val;
+            updateImagePreview('p-imagen', 'p-preview');
+        }
+
+        function updateImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            const container = document.getElementById('p-preview-container');
+            
+            if (input && preview && container) {
+                const val = input.value.trim();
+                if (val) {
+                    preview.src = val;
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        }
+
+        async function uploadAssetImage(inputEl, targetInputId, previewId) {
+            if (!inputEl.files || !inputEl.files[0]) return;
+            const file = inputEl.files[0];
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const statusEl = document.getElementById('save-status');
+            statusEl.style.display = 'block';
+            statusEl.style.color = '#ffbb33';
+            statusEl.innerText = `Subiendo ${file.name} al servidor...`;
+
+            try {
+                const res = await fetch('/api/marketing/catalog/upload-asset', {
+                    method: 'POST',
+                    body: formData
+                });
+                const json = await res.json();
+                if (json.success && json.data) {
+                    document.getElementById(targetInputId).value = json.data.path;
+                    updateImagePreview(targetInputId, previewId);
+                    await loadAssetList();
+                    const selectEl = document.getElementById('p-imagen-select');
+                    if (selectEl) selectEl.value = json.data.path;
+
+                    statusEl.style.color = '#00c851';
+                    statusEl.innerText = `✅ Foto subida exitosamente: ${json.data.path}`;
+                    alert(`✅ Foto cargada correctamente: ${json.data.path}`);
+                } else {
+                    statusEl.style.color = '#ff4444';
+                    statusEl.innerText = `❌ Error al subir foto: ${json.error || 'Desconocido'}`;
+                    alert(`Error: ${json.error || 'No se pudo subir la foto'}`);
+                }
+            } catch(e) {
+                statusEl.style.color = '#ff4444';
+                statusEl.innerText = '❌ Error de red: Inicia el servidor con "npm start" para subir fotos directamente.';
+                alert('No se pudo conectar con el servidor local para subir la foto. Inicia el servidor con "npm start".');
             }
         }
     </script>

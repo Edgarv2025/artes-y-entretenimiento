@@ -7,6 +7,7 @@ const path = require('path');
 require('./database');
 
 const marketingRoutes = require('./routes/marketingRoutes');
+const { generateSitemapXml, generateRobotsTxt, runAutonomousSeoCycle } = require('./services/seoService');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,23 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// --- Rutas SEO Dinámicas para Google Search Console ---
+app.get('/sitemap.xml', (req, res) => {
+  const host = req.get('host');
+  const protocol = req.protocol || 'http';
+  const baseUrl = `${protocol}://${host}`;
+  res.header('Content-Type', 'application/xml');
+  res.send(generateSitemapXml(baseUrl));
+});
+
+app.get('/robots.txt', (req, res) => {
+  const host = req.get('host');
+  const protocol = req.protocol || 'http';
+  const baseUrl = `${protocol}://${host}`;
+  res.header('Content-Type', 'text/plain');
+  res.send(generateRobotsTxt(baseUrl));
+});
 
 // Montar API de Marketing Inteligente y CRM
 app.use('/api/marketing', marketingRoutes);
@@ -29,11 +47,25 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => {
+  // Ejecutar el primer ciclo del algoritmo SEO continuo al iniciar
+  const seoStatus = runAutonomousSeoCycle();
+  
+  // Programar optimización continua cada 24 horas (86,400,000 ms)
+  setInterval(() => {
+    try {
+      runAutonomousSeoCycle();
+    } catch (e) {
+      console.error('[SEO Engine] Error en ciclo continuo:', e.message);
+    }
+  }, 86400000);
+
   console.log('====================================================');
   console.log(' ✨ ARTES & ENTRETENIMIENTO - PLATAFORMA INTEGRAL');
   console.log(` 🌐 Sitio Web Público:       http://localhost:${PORT}/`);
   console.log(` 🛠️ Panel Administrativo:   http://localhost:${PORT}/admin.html`);
   console.log(` 🚀 Marketing Inteligente:   http://localhost:${PORT}/marketing.html`);
-  console.log(` 📡 API Backend:             http://localhost:${PORT}/api/marketing/analytics`);
+  console.log(` 🔍 Sitemap Google (SEO):    http://localhost:${PORT}/sitemap.xml`);
+  console.log(` 🤖 Robots.txt (SEO):        http://localhost:${PORT}/robots.txt`);
+  console.log(` 📈 Salud SEO Actual:        ${seoStatus.score}/100 (${seoStatus.currentSeason})`);
   console.log('====================================================');
 });

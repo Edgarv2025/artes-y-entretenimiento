@@ -1,5 +1,6 @@
+const { db } = require('./database');
 const { getCatalogData } = require('./services/catalogService');
-const { getAudiences, getCampaigns, createCampaign } = require('./services/campaignService');
+const { getAudiences, getCampaigns, createCampaign, deleteCampaign } = require('./services/campaignService');
 const { generateCommercialContent } = require('./services/aiService');
 const { createContentAndPublication, getPublications, updatePublicationStatus } = require('./services/publicationService');
 const { getLeads, createLead, updateLeadStatus, getLeadStats, generateWhatsAppResponse } = require('./services/leadService');
@@ -7,6 +8,9 @@ const { syncMediaFiles, getMediaItems } = require('./services/mediaService');
 const { getDashboardAnalytics } = require('./services/analyticsService');
 
 async function runTests() {
+  let newCamp = null;
+  let newLead = null;
+  try {
   console.log('--- 1. Probando Catálogo de datos.js ---');
   const catalog = getCatalogData();
   console.log(`✓ Paquetes encontrados: ${catalog.paquetes.length}`);
@@ -18,7 +22,7 @@ async function runTests() {
   const audiences = getAudiences();
   console.log(`✓ Audiencias en base de datos: ${audiences.length}`);
   
-  const newCamp = createCampaign({
+  newCamp = createCampaign({
     name: 'Campaña de Prueba Automatizada BTL',
     objective: 'Activación Marcas',
     audience_id: 2,
@@ -84,7 +88,7 @@ async function runTests() {
   console.log(`✓ Archivos multimedia sincronizados: ${mediaList.length} elementos`);
 
   console.log('\n--- 6. Probando CRM de Leads ---');
-  const newLead = createLead({
+  newLead = createLead({
     name: 'Carolina Martínez Test',
     company: 'Bodas & Glamour',
     client_type: 'Organizador de eventos',
@@ -114,6 +118,16 @@ async function runTests() {
   console.log('\n====================================================');
   console.log(' 🎉 ¡TODOS LOS SERVICIOS Y ENTIDADES FUNCIONAN AL 100%!');
   console.log('====================================================\n');
+  } finally {
+    if (newCamp && newCamp.id) {
+      deleteCampaign(newCamp.id);
+    }
+    if (newLead && newLead.id) {
+      db.prepare('DELETE FROM LeadActivity WHERE lead_id = ?').run(newLead.id);
+      db.prepare('DELETE FROM Lead WHERE id = ?').run(newLead.id);
+    }
+    console.log('🧹 Limpieza de datos de prueba finalizada. Base de datos protegida.\n');
+  }
 }
 
 runTests().catch(err => {

@@ -1,12 +1,12 @@
 {
   "name": "artes-y-entretenimiento-main",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "build": "node build-static.js",
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "test": "node -e \"require('./server/database'); console.log('Database OK');\""
+    "test": "node server/test-api.js"
   },
   "keywords": [],
   "author": "",
