@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artes y Entretenimiento | Alquiler de Sonido, Luces, Pistas LED y DJ Profesional en Bogotá</title>
-    <meta name="description" content="Producción técnica para eventos en Bogotá y Colombia. Alquiler de sonido profesional Beta3, pantallas y pistas LED, iluminación robótica y DJs de primer nivel (DJ Cool & DJ Ice). Planes desde $600.000 COP.">
-    <meta name="keywords" content="DJ para bodas Bogotá, alquiler de sonido eventos Colombia, pistas de baile LED, pantallas lagrimales LED, luces para 15 años, eventos corporativos Bogotá, DJ Cool, DJ Ice, sonido profesional Chía">
+    <meta name="theme-color" content="#d4af37">
+    <meta name="application-name" content="Artes & Entretenimiento">
+    <title>DJ, Sonido e Iluminación para Eventos en Bogotá | Artes & Entretenimiento</title>
+    <meta name="description" content="DJ, sonido e iluminación para eventos en Bogotá. Alquiler de sonido profesional, luces, pantallas LED, DJ para bodas y eventos empresariales en Bogotá, Colombia.">
+    <meta name="keywords" content="DJ para eventos Bogotá, alquiler de sonido Bogotá, sonido profesional para eventos, luces e iluminación para eventos Bogotá, DJ para bodas Bogotá, DJ para cumpleaños Bogotá, eventos empresariales Bogotá, sonido e iluminación para fiestas, Bogotá Colombia">
     <meta name="author" content="Edgar DJ Cool - Artes y Entretenimiento">
-    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <link rel="canonical" href="https://artesyentretenimiento.com/">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preload" href="fotos/hero.png" as="image" type="image/png">
 
     <!-- Metadatos de Geolocalización (SEO Local Bogotá) -->
     <meta name="geo.region" content="CO-DC">
@@ -66,7 +73,7 @@
       "sameAs": [
         "https://www.facebook.com/artesyentretenimiento",
         "https://www.instagram.com/artyento/",
-        "https://www.instagram.com/edgardjcool/"
+        "https://www.tiktok.com/@artyento"
       ],
       "aggregateRating": {
         "@type": "AggregateRating",
@@ -123,18 +130,19 @@
         <div class="logo">
             <span class="logo-text">Artes <span class="highlight">&</span> Entretenimiento</span>
         </div>
-        <nav class="nav">
+        <nav class="nav" aria-label="Navegación principal">
             <ul class="nav-links">
-                <li><a href="#inicio">La Experiencia</a></li>
-                <li><a href="#emocion">Nuestra Magia</a></li>
-                <li><a href="#artistas">Artistas</a></li>
-                <li><a href="#paquetes">Propuestas Integrales</a></li>
-                <li><a href="#testimonios">Testimonios</a></li>
-                <li><a href="#galeria">Momentos</a></li>
-                <li><a href="#contacto">Hablemos</a></li>
+                <li><a href="#inicio" aria-label="Ir a inicio">La Experiencia</a></li>
+                <li><a href="#servicios" aria-label="Ir a servicios">Servicios</a></li>
+                <li><a href="#paquetes" aria-label="Ir a paquetes">Paquetes</a></li>
+                <li><a href="#empresariales" aria-label="Ir a eventos empresariales">Eventos Empresariales</a></li>
+                <li><a href="#bodas" aria-label="Ir a bodas y celebraciones">Bodas y Celebraciones</a></li>
+                <li><a href="#testimonios" aria-label="Ir a testimonios">Testimonios</a></li>
+                <li><a href="#faq" aria-label="Ir a preguntas frecuentes">FAQ</a></li>
+                <li><a href="#contacto" aria-label="Ir a contacto">Contacto</a></li>
             </ul>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
+            <div class="hamburger" aria-label="Abrir menú de navegación" role="button" tabindex="0">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </div>
         </nav>
     </header>
@@ -143,37 +151,36 @@
     <section class="hero" id="inicio">
         <div class="hero-overlay"></div>
         <div class="hero-content reveal">
-            <h1 class="hero-title">Vive tu Experiencia.<br><span class="highlight-text">Nosotros ponemos la Magia.</span></h1>
+            <h1 class="hero-title">DJ, Sonido e Iluminación para Eventos en Bogotá</h1>
             <p class="hero-subtitle">Manejamos la emoción de tu evento para que tú solo te dediques a disfrutar cada instante.</p>
             <div class="visit-counter reveal delay-1">
                 <i class="fas fa-fire" style="color: #ff5500;"></i> <span id="visit-count">1000</span> personas han descubierto nuestra magia.
             </div>
-            <a href="#contacto" class="btn-primary" style="margin-top: 20px;">Diseña tu Experiencia <i class="fas fa-arrow-right"></i></a>
+            <a href="#contacto" class="btn-primary" style="margin-top: 20px;" aria-label="Solicitar cotización para DJ, sonido e iluminación en Bogotá">Diseña tu Experiencia <i class="fas fa-arrow-right"></i></a>
         </div>
     </section>
 
-    <!-- Emotional Services Section -->
-    <section class="services section" id="emocion">
+    <section class="services section" id="servicios">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">El Arte de la <span class="highlight">Emoción</span></h2>
-                <p class="section-desc">Entendemos que no buscas sonido o luces; buscas que tus invitados rían, lloren de alegría y bailen hasta el amanecer. Nosotros orquestamos esos sentimientos.</p>
+                <h2 class="section-title">Servicios</h2>
+                <p class="section-desc">Soluciones de DJ, sonido e iluminación para bodas, fiestas privadas, eventos empresariales y celebraciones en Bogotá.</p>
             </div>
             <div class="services-grid">
                 <div class="service-card reveal">
                     <i class="fas fa-heartbeat service-icon"></i>
-                    <h3>El Latido de la Fiesta</h3>
-                    <p>Audio que no solo se escucha, se siente en el pecho. Diseñamos la acústica perfecta para que cada nota musical erice la piel de tus invitados.</p>
+                    <h3>DJ para eventos en Bogotá</h3>
+                    <p>Audio potente, mezcla profesional y animación que mantiene a tus invitados en la pista durante toda la noche.</p>
                 </div>
                 <div class="service-card reveal delay-1">
                     <i class="fas fa-magic service-icon"></i>
-                    <h3>Atmósferas Mágicas</h3>
-                    <p>Transformamos espacios comunes en mundos extraordinarios. Nuestra iluminación pinta de colores las emociones de tu noche.</p>
+                    <h3>Sonido profesional para eventos</h3>
+                    <p>Equipos Beta3, cabinas, subwoofers y sistema de audio para eventos con claridad, potencia y excelente cobertura.</p>
                 </div>
                 <div class="service-card reveal delay-2">
                     <i class="fas fa-star service-icon"></i>
-                    <h3>Conducción Estelar</h3>
-                    <p>Maestría de ceremonia y animación que conecta almas. Llevamos el hilo conductor de tu evento con elegancia y energía arrolladora.</p>
+                    <h3>Luces e iluminación para eventos</h3>
+                    <p>Iluminación robótica, láser, LED y efectos visuales con un diseño que transforma cada espacio en un escenario.</p>
                 </div>
             </div>
         </div>
@@ -197,7 +204,7 @@
     <section class="paquetes-section section" id="paquetes">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Nuestras <span class="highlight">Propuestas Integrales</span></h2>
+                <h2 class="section-title">Paquetes</h2>
                 <p class="section-desc">Diseñadas para elevar tu evento al máximo nivel. Selecciona la experiencia que mejor se adapte a ti.</p>
             </div>
             <div class="paquetes-grid" id="paquetes-container">
@@ -206,11 +213,63 @@
         </div>
     </section>
 
+    <section class="services section" id="empresariales">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Eventos Empresariales</h2>
+                <p class="section-desc">Creamos experiencias para ferias, lanzamientos, reuniones, convenciones y celebraciones corporativas con sonido, iluminación y DJ profesionales.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <i class="fas fa-building service-icon"></i>
+                    <h3>Producción para eventos empresariales</h3>
+                    <p>Solución integral para ferias, inauguraciones, gala y activaciones con imagen premium y ambiente corporativo impecable.</p>
+                </div>
+                <div class="service-card reveal delay-1">
+                    <i class="fas fa-microphone service-icon"></i>
+                    <h3>Audio para conferencias y presentaciones</h3>
+                    <p>Equipo de sonorización profesional para discursos, presentaciones y ambientación de eventos institucionales.</p>
+                </div>
+                <div class="service-card reveal delay-2">
+                    <i class="fas fa-lightbulb service-icon"></i>
+                    <h3>Iluminación de impacto</h3>
+                    <p>Diseños de iluminación pensados para destacar marca, productos y espacios de alto nivel en Bogotá.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services section" id="bodas">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="section-title">Bodas y Celebraciones</h2>
+                <p class="section-desc">Bodas, quince años, cumpleaños, aniversarios y celebraciones con DJ, sonido e iluminación pensados para crear un ambiente inolvidable.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card reveal">
+                    <i class="fas fa-ring service-icon"></i>
+                    <h3>DJ para bodas Bogotá</h3>
+                    <p>Musicalizamos cada momento especial con una mezcla elegante, energética y adaptada al estilo de cada pareja.</p>
+                </div>
+                <div class="service-card reveal delay-1">
+                    <i class="fas fa-cake-candles service-icon"></i>
+                    <h3>DJ para cumpleaños y fiestas</h3>
+                    <p>Celebraciones con ritmo, luces y ambiente perfecto para que cada invitado disfrute al máximo la noche.</p>
+                </div>
+                <div class="service-card reveal delay-2">
+                    <i class="fas fa-champagne-glasses service-icon"></i>
+                    <h3>Sonido e iluminación para fiestas</h3>
+                    <p>Especialistas en ambientación premium para fiestas privadas, quince años y grandes celebraciones sociales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Testimonios Section (MOVED HERE) -->
     <section class="testimonios-section section" id="testimonios">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Lo que dicen <span class="highlight">nuestros clientes</span></h2>
+                <h2 class="section-title">Testimonios</h2>
                 <p class="section-desc">Más de 500 eventos exitosos nos respaldan. Tu tranquilidad es nuestra prioridad.</p>
             </div>
             
@@ -245,25 +304,33 @@
     <section class="faq-section section" id="faq">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Preguntas <span class="highlight">Frecuentes</span></h2>
+                <h2 class="section-title">Preguntas Frecuentes</h2>
             </div>
             
             <div class="faq-accordion reveal">
                 <div class="faq-item">
-                    <button class="faq-question">¿Con cuánto tiempo de anticipación debo reservar?</button>
-                    <div class="faq-answer"><p>Recomendamos reservar con al menos 1 a 2 meses de anticipación, especialmente para temporada alta (noviembre-diciembre). Sin embargo, contáctanos para verificar disponibilidad de último minuto.</p></div>
+                    <button class="faq-question" aria-label="¿Cuánto cuesta un DJ para eventos en Bogotá?">¿Cuánto cuesta un DJ para eventos en Bogotá?</button>
+                    <div class="faq-answer"><p>El costo de un DJ para eventos en Bogotá depende del paquete, duración, sonido, iluminación y logística del evento. Nuestros planes empiezan desde $600.000 COP y se adaptan a bodas, fiestas y eventos empresariales.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">¿Viajan a otras ciudades de Colombia?</button>
-                    <div class="faq-answer"><p>¡Sí! Tenemos base principal, pero cubrimos eventos en toda Colombia. Los costos de viáticos y transporte se cotizan por separado según el destino.</p></div>
+                    <button class="faq-question" aria-label="¿Incluye sonido e iluminación?">¿Incluye sonido e iluminación?</button>
+                    <div class="faq-answer"><p>Sí, nuestros paquetes integrales incluyen equipos de sonido profesional, iluminación de ambiente, DJ y montaje para eventos. Puedes pedir una propuesta personalizada según el tipo de evento.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">¿El precio de los paquetes incluye el transporte y montaje?</button>
-                    <div class="faq-answer"><p>El transporte está incluido dentro del perímetro urbano de nuestra sede. Para zonas aledañas o rurales, tiene un recargo adicional. El montaje y desmontaje siempre está incluido.</p></div>
+                    <button class="faq-question" aria-label="¿Atienden eventos empresariales?">¿Atienden eventos empresariales?</button>
+                    <div class="faq-answer"><p>¡Sí! Podemos trabajar en eventos empresariales, inauguraciones, ferias, lanzamientos y reuniones corporativas con audio, iluminación y protocolo para mejorar la experiencia del público.</p></div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">¿Podemos elegir la música o ustedes deciden?</button>
-                    <div class="faq-answer"><p>¡Es tu evento! Puedes pasarnos una lista de canciones imperdibles y de canciones prohibidas. Nuestros DJs combinarán tus gustos con su experiencia para asegurar que la pista siempre esté llena.</p></div>
+                    <button class="faq-question" aria-label="¿Cubren municipios cercanos?">¿Cubren municipios cercanos?</button>
+                    <div class="faq-answer"><p>Prestamos servicios en Bogotá y municipios cercanos de Cundinamarca, con cotización de transporte y logística según la ubicación del evento.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-label="¿Con cuánto tiempo de anticipación debo reservar?">¿Con cuánto tiempo de anticipación debo reservar?</button>
+                    <div class="faq-answer"><p>Recomendamos reservar con al menos 1 a 2 meses de anticipación, especialmente para temporada alta. También atendemos eventos con disponibilidad inmediata según agenda.</p></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-label="¿Pueden viajar a otras ciudades?">¿Viajan a otras ciudades de Colombia?</button>
+                    <div class="faq-answer"><p>¡Sí! Tenemos base principal en Bogotá y cubrimos eventos en varios destinos de Colombia. Se ajusta transporte, viáticos y montaje.</p></div>
                 </div>
             </div>
         </div>
@@ -274,14 +341,15 @@
         <div class="container">
             <div class="contact-wrapper reveal">
                 <div class="contact-info">
-                    <h2 class="section-title" style="text-align: left;">Demos el <span class="highlight">Primer Paso</span></h2>
-                    <p style="margin-bottom: 40px; color: var(--text-muted);">Hablemos de tus sueños y de cómo haremos que tu evento sea la mejor noche de tu vida.</p>
+                    <h2 class="section-title" style="text-align: left;">Contacto</h2>
+                    <p style="margin-bottom: 40px; color: var(--text-muted);">Prestamos servicios en Bogotá y municipios cercanos. Hablemos de tus sueños y de cómo haremos que tu evento sea la mejor noche de tu vida.</p>
                     
                     <div class="info-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <h4>Nuestro Centro de Experiencias</h4>
-                            <p>Calle 16 h bis 112 a 14, Bogotá, Colombia</p>
+                            <p>Calle 16 h Bis #112A-14, Bogotá, Colombia</p>
+                            <p style="margin-top: 8px;"><a href="https://www.google.com/maps/search/?api=1&query=Calle+16+h+Bis+%23112A-14,+Bogota,+Colombia" target="_blank" rel="noopener noreferrer" style="color: #d4af37; text-decoration: none;">Ver ubicación en Google Maps</a></p>
                         </div>
                     </div>
                     <div class="info-item">
@@ -302,7 +370,7 @@
                 </div>
                 <div class="contact-map">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m3!1d3976.626466367503!2d-74.15654!3d4.66598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNMKwMzknNTcuNSJOIDc0wrAwOScyMy41Ilc!5e0!3m2!1ses!2sco!4v1680000000000!5m2!1ses!2sco" 
+                        src="https://www.google.com/maps?q=Calle+16+h+Bis+%23112A-14,+Bogota,+Colombia&z=15&output=embed" 
                         width="100%" 
                         height="100%" 
                         style="border:0; border-radius: 10px;" 

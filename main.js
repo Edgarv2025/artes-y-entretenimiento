@@ -112,9 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
         item.media.forEach((mediaUrl, idx) => {
             let activeClass = idx === 0 ? 'active' : '';
             if (mediaUrl.endsWith('.mp4')) {
-                mediaHtml += `<video src="${mediaUrl}" autoplay muted loop playsinline class="gallery-img slide ${activeClass}" style="pointer-events: none;"></video>`;
+                mediaHtml += `<video src="${mediaUrl}" autoplay muted loop playsinline class="gallery-img slide ${activeClass}" style="pointer-events: none;" preload="metadata"></video>`;
             } else {
-                mediaHtml += `<img src="${mediaUrl}" alt="${item.title}" class="gallery-img slide ${activeClass}">`;
+                mediaHtml += `<img src="${mediaUrl}" alt="${item.title} en Bogotá" class="gallery-img slide ${activeClass}" loading="lazy" decoding="async">`;
             }
         });
     
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const paqueteHtml = `
                 <div class="paquete-card reveal active" style="transition-delay: ${delay}s">
                     <div class="paquete-img-wrapper">
-                        <img src="${paquete.imagen}" alt="${paquete.titulo}" class="paquete-img">
+                        <img src="${paquete.imagen}" alt="${paquete.titulo} para eventos en Bogotá" class="paquete-img" loading="lazy" decoding="async">
                     </div>
                     <div class="paquete-content">
                         <h3>${paquete.titulo}</h3>
@@ -214,11 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (artista.imagenes && artista.imagenes.length > 0) {
                 artista.imagenes.forEach((img, idx) => {
                     const activeClass = idx === 0 ? 'active' : '';
-                    imgHtml += `<img src="${img}" alt="${artista.nombre}" class="artista-img slide ${activeClass}">`;
+                    imgHtml += `<img src="${img}" alt="${artista.nombre} en Bogotá" class="artista-img slide ${activeClass}" loading="lazy" decoding="async">`;
                 });
             } else if (artista.imagen) {
                 // Fallback for old data structure
-                imgHtml = `<img src="${artista.imagen}" alt="${artista.nombre}" class="artista-img slide active">`;
+                imgHtml = `<img src="${artista.imagen}" alt="${artista.nombre} en Bogotá" class="artista-img slide active" loading="lazy" decoding="async">`;
             }
 
             const artistaHtml = `

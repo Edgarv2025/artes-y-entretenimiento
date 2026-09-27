@@ -122,7 +122,7 @@ function generateStructuredData(baseUrl = 'https://artesyentretenimiento.com') {
         'priceRange': '$$',
         'address': {
           '@type': 'PostalAddress',
-          'streetAddress': 'Calle 16 h bis 112 a 14',
+          'streetAddress': 'Calle 16 h Bis #112A-14',
           'addressLocality': 'Bogotá',
           'addressRegion': 'Bogotá D.C.',
           'postalCode': '110911',
@@ -144,7 +144,7 @@ function generateStructuredData(baseUrl = 'https://artesyentretenimiento.com') {
         'sameAs': [
           'https://www.facebook.com/artesyentretenimiento',
           'https://www.instagram.com/artyento/',
-          'https://www.instagram.com/edgardjcool/'
+          'https://www.tiktok.com/@artyento'
         ],
         'founder': {
           '@type': 'Person',

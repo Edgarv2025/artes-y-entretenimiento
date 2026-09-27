@@ -1,0 +1,10 @@
+node_modules/
+public/
+server/database.sqlite
+server/database.sqlite-shm
+server/database.sqlite-wal
+tmp-*
+campanas/*
+!campanas/.gitkeep
+*.log
+.env*

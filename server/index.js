@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 
 // Inicializar base de datos
@@ -14,8 +15,15 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors());
+app.use(compression({ level: 9, threshold: 0 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+  const isHtml = req.path.endsWith('.html') || req.path === '/';
+  res.setHeader('Cache-Control', isHtml ? 'no-cache' : 'public, max-age=31536000, immutable');
+  next();
+});
 
 // --- Rutas SEO Dinámicas para Google Search Console ---
 app.get('/sitemap.xml', (req, res) => {
@@ -34,12 +42,44 @@ app.get('/robots.txt', (req, res) => {
   res.send(generateRobotsTxt(baseUrl));
 });
 
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(path.join(publicPath, 'public', 'manifest.json'));
+});
+
+app.get('/schema/local-business.json', (req, res) => {
+  res.sendFile(path.join(publicPath, 'schema', 'local-business.json'));
+});
+
+const seoPages = [
+  ['/', 'index.html'],
+  ['/dj-bogota', 'dj-bogota.html'],
+  ['/sonido-eventos-bogota', 'sonido-eventos-bogota.html'],
+  ['/iluminacion-eventos-bogota', 'iluminacion-eventos-bogota.html'],
+  ['/dj-bodas-bogota', 'dj-bodas-bogota.html'],
+  ['/eventos-empresariales-bogota', 'eventos-empresariales-bogota.html']
+];
+
+seoPages.forEach(([route, file]) => {
+  app.get(route, (req, res) => {
+    res.sendFile(path.join(publicPath, file));
+  });
+});
+
 // Montar API de Marketing Inteligente y CRM
 app.use('/api/marketing', marketingRoutes);
 
 // El servidor vive dentro de la raíz del proyecto.
 const publicPath = path.resolve(__dirname, '..');
-app.use(express.static(publicPath));
+app.use(express.static(publicPath, {
+  maxAge: '1y',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 
 // Fallback a index.html para rutas no encontradas
 app.get('/', (req, res) => {

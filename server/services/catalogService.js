@@ -27,7 +27,7 @@ function getCatalogData() {
         telefono: '+57 320 245 90 32',
         whatsapp: '573202459032',
         ciudad: 'Bogotá, Colombia',
-        direccion: 'Calle 16 h bis 112 a 14, Bogotá'
+        direccion: 'Calle 16 h Bis #112A-14, Bogotá'
       }
     };
   } catch (err) {
