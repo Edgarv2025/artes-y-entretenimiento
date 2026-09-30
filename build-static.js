@@ -21,7 +21,7 @@ const directories = ['assets', 'fotos', 'campanas', 'schema'];
 
 function prepareSeoHtml(html) {
   const season = getCurrentSeasonConfig();
-  const baseUrl = process.env.SEO_BASE_URL || 'https://artesyentretenimiento.com';
+  const baseUrl = process.env.SEO_BASE_URL || 'https://artyento.artyento.workers.dev/';
   const keywords = season.keywords.join(', ');
   const description = `Artes y Entretenimiento: ${season.primaryFocus} en Bogotá y Colombia. Sonido profesional, iluminación, pantallas LED y DJ para eventos. ${season.tone}.`;
   const structuredData = JSON.stringify(generateStructuredData(baseUrl), null, 2);
@@ -57,37 +57,37 @@ for (const directory of directories) {
 const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://artesyentretenimiento.com/</loc>
+    <loc>https://artyento.artyento.workers.dev/</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://artesyentretenimiento.com/dj-bogota</loc>
+    <loc>https://artyento.artyento.workers.dev/dj-bogota</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://artesyentretenimiento.com/sonido-eventos-bogota</loc>
+    <loc>https://artyento.artyento.workers.dev/sonido-eventos-bogota</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://artesyentretenimiento.com/iluminacion-eventos-bogota</loc>
+    <loc>https://artyento.artyento.workers.dev/iluminacion-eventos-bogota</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://artesyentretenimiento.com/dj-bodas-bogota</loc>
+    <loc>https://artyento.artyento.workers.dev/dj-bodas-bogota</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://artesyentretenimiento.com/eventos-empresariales-bogota</loc>
+    <loc>https://artyento.artyento.workers.dev/eventos-empresariales-bogota</loc>
     <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -96,7 +96,7 @@ const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemapContent, 'utf8');
-fs.writeFileSync(path.join(publicDir, 'robots.txt'), 'User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /server/\nSitemap: https://artesyentretenimiento.com/sitemap.xml\n', 'utf8');
+fs.writeFileSync(path.join(publicDir, 'robots.txt'), 'User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /server/\nSitemap: https://artyento.artyento.workers.dev/sitemap.xml\n', 'utf8');
 fs.writeFileSync(path.join(publicDir, 'manifest.json'), JSON.stringify({
   name: 'Artes & Entretenimiento',
   short_name: 'Artes & Entretenimiento',
